@@ -608,7 +608,8 @@
     "found/sonicpi/sp_bell/elec_chime.flac",
     "found/sonicpi/sp_bell/elec_ping.flac",
     "found/sonicpi/sp_bell/elec_triangle.flac",
-    "found/sonicpi/sp_bell/perc_bell.flac"
+    "found/sonicpi/sp_bell/perc_bell.flac",
+    "found/sonicpi/sp_bell/perc_bell2.flac"
   ],
   "sp_choir": [
     "found/sonicpi/sp_choir/ambi_choir.flac"
@@ -619,11 +620,20 @@
     "found/sonicpi/sp_glass/ambi_haunted_hum.flac"
   ],
   "sp_glitch": [
-    "found/sonicpi/sp_glitch/glitch_bass_g.flac"
+    "found/sonicpi/sp_glitch/glitch_bass_g.flac",
+    "found/sonicpi/sp_glitch/glitch_perc1.flac",
+    "found/sonicpi/sp_glitch/glitch_perc2.flac",
+    "found/sonicpi/sp_glitch/glitch_perc3.flac",
+    "found/sonicpi/sp_glitch/glitch_perc4.flac",
+    "found/sonicpi/sp_glitch/glitch_perc5.flac",
+    "found/sonicpi/sp_glitch/glitch_robot1.flac",
+    "found/sonicpi/sp_glitch/glitch_robot2.flac"
   ],
   "sp_impact": [
     "found/sonicpi/sp_impact/misc_cineboom.flac",
     "found/sonicpi/sp_impact/perc_door.flac",
+    "found/sonicpi/sp_impact/perc_impact1.flac",
+    "found/sonicpi/sp_impact/perc_impact2.flac",
     "found/sonicpi/sp_impact/perc_till.flac"
   ],
   "synth_12": [

@@ -120,6 +120,7 @@
 <header>
   <h1>haspyd <span aria-hidden="true">ᚼ</span> strudel</h1>
   <span class="gap"></span>
+  <button id="demo">приклад</button>
   <button id="gridtoggle" aria-pressed="true">сітка</button>
   <button id="smaller" aria-label="Менший шрифт">A−</button>
   <button id="bigger" aria-label="Більший шрифт">A+</button>
@@ -142,21 +143,111 @@
   const DEFAULT_CODE = `samples('github:undo-despot/haspyd-samples')
 setcpm(33)
 
+// ── ритм ────────────────────────────────────────────────
 $: s("ae_kick(<3 5 3 7>,16,<0 2 0 5>)")
-  .n("<0 0 1 0>").shape(.3)
+  .n("<0 0 1 0>").speed("<1 1 .9 1.2>").shape(.3)
   .linger("<1 1 1 .5 1 1 .25 1>")
+  .mask("<0!4 1!60>")
+
+$: s("ae_sh09").n(4)
+  .struct("~ x ~ ~ x ~ ~ [~ x]")
+  .sometimesBy(.25, x => x.speed(-1))
+  .crush(7).room(.2).gain(.8)
+  .mask("<0!8 1!56>")
 
 $: s("ae_sh09*<8 12 16 6>").n(1)
-  .gain(perlin.range(.15, .55)).pan(sine.fast(3)).hpf(3000)
+  .gain(perlin.range(.15, .5)).pan(sine.fast(3)).hpf(3000)
 
+$: s("true_face_drums*8").n(irand(16))
+  .degradeBy(.45).ribbon(3, 2)
+  .hpf(200).cut(5).gain(.5)
+  .mask("<0!12 1!52>")
+
+$: s("sp_arovane").n("<0 2 4 1>")
+  .slice(8, "0 ~ 3 [5 5] ~ 6 2 ~")
+  .cut(4).gain(.55)
+  .mask("<0!16 1!48>")
+
+$: s("sp_glitch(5,16,<0 3>)").n(irand(8))
+  .ribbon(11, 1).pan(rand).gain(.5)
+  .mask("<0!6 1!58>")
+
+// ── метал ───────────────────────────────────────────────
 $: s("ae_steel*16").n(irand(63))
   .degradeBy(.35).ribbon(7, 2)
-  .pan(rand).cut(1).gain(.6)
+  .speed("<1 1 1.5 1 .5 1 2 1>")
+  .pan(rand).cut(1).gain(.55)
+  .off(1/16, x => x.speed(2).gain(.25))
+
+$: n("0 [5 17] 9 ~ 20 ~ [3 3 3] 30").add(n("<0 4 2 7>"))
+  .s("ae_steelx").jux(rev)
+  .delay(.3).delaytime(3/16).delayfeedback(.5).gain(.6)
+  .mask("<0!2 1!62>")
+
+$: s("sp_bell(3,8,<0 2 5>)").n("<0 2 4 5>")
+  .speed("<1 .5 2 1.5>")
+  .delay(.5).delaytime(3/16).delayfeedback(.6)
+  .room(.4).gain(.4)
+
+$: s("anvil*<2 3>").n("<0 1 2>")
+  .speed("<1 1.3 .8>").room(.3).gain(.35)
+  .mask("<0!10 1!54>")
+
+// ── латунь ──────────────────────────────────────────────
+$: s("vs_tuba").n("<0 0 3 1>")
+  .struct("x ~ ~ ~ ~ x ~ ~")
+  .shape(.3).lpf(700).gain(.9)
+  .mask("<0!8 1!56>")
+
+$: s("vs_buzz").n(irand(10))
+  .struct("~ ~ x ~ ~ ~ ~ [x x]").ribbon(5, 4)
+  .pan(.3).room(.3).gain(.5)
+  .mask("<0!14 1!50>")
+
+$: s("<vs_fall ~ ~ vs_fall:4 ~ vs_fall:7 ~ ~>")
+  .room(.6).delay(.5).delaytime(3/8).gain(.5)
+
+$: s("vs_mute").n("<[0,3] [1,5] [2,6] [4,7]>")
+  .slow(2).attack(.3).release(1)
+  .room(.8).roomsize(5).orbit(2).gain(.35)
+
+// ── тон ─────────────────────────────────────────────────
+$: s("ae_sh09").n(0)
+  .struct("x ~ ~ x ~ ~ x ~")
+  .speed("<1 1 .75 1.5>").clip(.6)
+  .lpf(sine.range(200, 2200).fast(3)).lpq(12).shape(.4)
+  .mask("<0!20 1!44>")
+
+$: s("ae_shstr").n("<3 12 20 7 31 16>")
+  .slice(8, "0 3 [1 6] 2 7 ~ 5 4")
+  .cut(2).room(.4).gain(.55)
+  .mask("<0!12 1!52>")
 
 $: s("ae_mell").n("<[0,5] [3,7] [1,9] [6,11]>")
   .slow(2).speed(.5).attack(.4).release(1.5)
   .lpf(sine.range(400, 3000).slow(16))
-  .room(.9).roomsize(6).gain(.5)
+  .room(.9).roomsize(6).orbit(2).gain(.45)
+
+$: s("bip_3*4").n("0 3 5 2")
+  .degradeBy(.5).ribbon(9, 2)
+  .crush(8).pan(.7).gain(.35)
+
+// ── голос і простір ─────────────────────────────────────
+$: s("sp_choir").chop(8).rev().slow(4)
+  .room(.9).roomsize(8).orbit(2).gain(.4)
+
+$: s("<~ ~ ~ ae_vox ~ ~ ae_vox:1 ~>")
+  .chop(16).rev().speed(.5)
+  .room(.9).orbit(2).gain(.45)
+
+$: s("eye_tracker_2(3,16,7)").n(irand(8))
+  .ribbon(2, 2).speed(2).pan(.2).gain(.35)
+
+$: s("radio_7105_1850/2").n("<0 1 2 3 4 5>/2")
+  .hpf(400).pan(sine.slow(8)).gain(.22)
+
+$: s("sp_glass/4").n("<0 1 2>/4")
+  .room(.8).orbit(2).gain(.3)
 `;
 
   const store = {
@@ -199,6 +290,16 @@ $: s("ae_mell").n("<[0,5] [3,7] [1,9] [6,11]>")
   $('smaller').onclick = () => resize(-2);
   $('bigger').onclick = () => resize(2);
   $('play').onclick = () => ed.toggle();
+
+  // «приклад» показує демо-трек; твій код зберігається і повертається другим кліком
+  const showDemo = (on) => {
+    if (on) { store.set('haspyd-code-mine', ed.code || ''); ed.setCode(DEFAULT_CODE); }
+    else { ed.setCode(store.get('haspyd-code-mine', DEFAULT_CODE)); }
+    store.set('haspyd-demo', on ? '1' : '0');
+    $('demo').textContent = on ? 'назад до мого' : 'приклад';
+  };
+  if (store.get('haspyd-demo', '0') === '1') $('demo').textContent = 'назад до мого';
+  $('demo').onclick = () => showDemo(store.get('haspyd-demo', '0') !== '1');
 
   // ── стан: грає / стоїть / помилка ────────────────────────
   el.addEventListener('update', (e) => {
