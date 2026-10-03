@@ -11,7 +11,8 @@ haspyd-samples/
   ├─ tone/     ← тональні звуки для мелодій
   ├─ voice/    ← голос
   ├─ texture/  ← простір і атмосфера
-  └─ egg/      ← easter eggs (｡•̀ᴗ-)✧
+  ├─ egg/      ← easter eggs (｡•̀ᴗ-)✧
+  └─ found/    ← знайдені звуки інших авторів (не мої)
 ```
 
 ## Як підключити в Strudel
@@ -36,6 +37,15 @@ stack(
 4. Закоміть і запуш. У Strudel звук буде доступний як `s("zgarda")`, `s("zgarda:2")`
 
 Назва папки = назва звуку в Strudel. Латиниця, малі літери, без пробілів.
+
+## Знайдені звуки
+
+У [`found/`](found/) лежить відкрита колекція звуків, які я знайшла: вони не мої,
+і я не заявляю на них авторство. Джерела й ліцензії — у [`found/SOURCES.md`](found/SOURCES.md).
+Якщо там є твій звук — напиши в [Issues](https://github.com/undo-despot/haspyd-samples/issues):
+додам твоє ім'я або видалю файл.
+
+*`found/` holds found sounds by other authors. If one is yours, open an Issue to be credited or have it removed.*
 
 ## Правила запису
 
