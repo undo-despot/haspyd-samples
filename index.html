@@ -63,6 +63,28 @@
   .cm-editor .cm-selectionBackground,
   .cm-editor .cm-content ::selection { background: #c8a13a44 !important; }
 
+  /* сітка: кожен звук — рядок, кожен удар — клітинка */
+  #work { display: grid; grid-template-columns: minmax(0, 1fr) auto; min-height: 0; }
+  #work.nogrid #orca { display: none; }
+  #orca {
+    border-left: 1px solid var(--dim);
+    padding: 14px 18px 10px 16px;
+    display: grid; grid-template-rows: minmax(0, 1fr) auto;
+    font: 300 14px/1 var(--mono); color: var(--dim);
+    overflow: hidden; user-select: none;
+  }
+  #cells { display: grid; grid-template-columns: 10ch repeat(32, 2.1ch); grid-auto-rows: 2.1ch; align-content: start; overflow: hidden; }
+  #cells span { display: block; text-align: center; line-height: 2.1ch; height: 2.1ch; }
+  #cells .name { text-align: left; color: var(--bone); white-space: nowrap; overflow: hidden; }
+  #cells .ph { color: var(--bone); }
+  #cells .old { color: #8a8474; }
+  #cells .on { color: var(--brass); }
+  #cells .hit { background: var(--brass); color: var(--ink); font-weight: 600; }
+  #bar { padding-top: 10px; color: var(--bone); white-space: pre; }
+  #bar b { color: var(--brass); font-weight: 400; }
+  #gridtoggle[aria-pressed="true"] { border-color: var(--brass); color: var(--brass); }
+  @media (max-width: 900px) { #orca, #gridtoggle { display: none; } }
+
   /* письмо: музика пише рядок знаків */
   #script {
     border-top: 1px solid var(--dim);
@@ -98,12 +120,13 @@
 <header>
   <h1>haspyd <span aria-hidden="true">ᚼ</span> strudel</h1>
   <span class="gap"></span>
+  <button id="gridtoggle" aria-pressed="true">сітка</button>
   <button id="smaller" aria-label="Менший шрифт">A−</button>
   <button id="bigger" aria-label="Більший шрифт">A+</button>
   <button id="play" aria-pressed="false">▷ грати</button>
 </header>
 
-<main id="stage"></main>
+<div id="work"><main id="stage"></main><aside id="orca" aria-hidden="true"><div id="cells"></div><div id="bar"></div></aside></div>
 
 <div id="script" aria-hidden="true"><span id="glyphs"></span></div>
 
@@ -202,10 +225,71 @@ $: s("ae_mell").n("<[0,5] [3,7] [1,9] [6,11]>")
   const MAX = 240;
   let line = '', last = null, lastCycle = -1, dirty = false;
 
+  // ── сітка: рядок = звук, стовпчик = крок такту ───────────
+  const COLS = 32;
+  const cellsEl = $('cells'), bar = $('bar'), work = $('work');
+  let ROWS = 0, cells = [], names = [];
+  const rowOf = new Map();
+  const blank = (r, c) => (r % 4 === 0 && c % 8 === 0) ? '+' : '·';
+  const buildGrid = () => {
+    const first = cellsEl.firstElementChild;
+    const cellH = first ? first.getBoundingClientRect().height : 0;
+    const rows = Math.max(8, Math.min(60, Math.floor(cellsEl.clientHeight / (cellH || 17))));
+    if (rows === ROWS) return;
+    ROWS = rows; cells = []; names = []; cellsEl.textContent = '';
+    for (let r = 0; r < ROWS; r++) {
+      const name = document.createElement('span'); name.className = 'name'; cellsEl.append(name); names.push(name);
+      cells.push([]);
+      for (let c = 0; c < COLS; c++) { const x = document.createElement('span'); x.textContent = blank(r, c); cellsEl.append(x); cells[r].push(x); }
+    }
+    for (const [s, r] of rowOf) if (r < ROWS) names[r].textContent = s;
+    phCol = -1;
+  };
+  let gridCycle = -1, phCol = -1;
+  const turn = () => {
+    for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+      const x = cells[r][c];
+      if (x.classList.contains('old')) { x.className = ''; x.textContent = blank(r, c); }
+      else if (x.classList.contains('on') || x.classList.contains('hit')) x.className = 'old';
+    }
+  };
+  const gridHit = (s, glyph, t) => {
+    if (!s || work.classList.contains('nogrid')) return;
+    let r = rowOf.get(s);
+    if (r === undefined) { r = rowOf.size; rowOf.set(s, r); if (r < ROWS) names[r].textContent = s; }
+    if (r >= ROWS) return;
+    const c = Math.min(COLS - 1, Math.floor((t - Math.floor(t)) * COLS + 1e-6));
+    const x = cells[r][c];
+    x.textContent = glyph; x.className = 'hit';
+    setTimeout(() => { if (x.classList.contains('hit')) x.className = 'on'; }, 130);
+  };
+  const gridTick = (time) => {
+    if (work.classList.contains('nogrid')) return;
+    const cyc = Math.floor(time);
+    if (cyc !== gridCycle) { if (gridCycle >= 0) turn(); gridCycle = cyc; }
+    const c = Math.floor((time - cyc) * COLS);
+    if (c !== phCol) {
+      if (phCol >= 0) for (let r = 0; r < ROWS; r++) cells[r][phCol].classList.remove('ph');
+      for (let r = 0; r < ROWS; r++) cells[r][c].classList.add('ph');
+      phCol = c;
+      bar.innerHTML = `цикл <b>${String(cyc).padStart(3, '0')}</b>   крок <b>${String(c + 1).padStart(2, '0')}</b>/${COLS}   голосів <b>${rowOf.size}</b>`;
+    }
+  };
+  const setGrid = (on) => {
+    work.classList.toggle('nogrid', !on);
+    $('gridtoggle').setAttribute('aria-pressed', on);
+    store.set('haspyd-grid', on ? '1' : '0');
+    if (on) { ROWS = 0; buildGrid(); buildGrid(); }
+  };
+  $('gridtoggle').onclick = () => setGrid(work.classList.contains('nogrid'));
+  setGrid(store.get('haspyd-grid', '1') === '1');
+  addEventListener('resize', () => { if (!work.classList.contains('nogrid')) buildGrid(); });
+
   const base = ed.onDraw.bind(ed);
   ed.onDraw = (haps, time, painters) => {
     base(haps, time, painters);
     if (last === null || time < last) { last = time; return; }
+    gridTick(time);
     for (const hap of haps) {
       const t = hap.whole?.begin?.valueOf?.();
       if (t === undefined || t <= last || t > time) continue;
@@ -213,7 +297,9 @@ $: s("ae_mell").n("<[0,5] [3,7] [1,9] [6,11]>")
       const key = `${v.s ?? ''}:${v.n ?? v.note ?? ''}`;
       const cycle = Math.floor(t);
       if (cycle !== lastCycle) { line += ' '; lastCycle = cycle; }
-      line += SIGNS[hash(key) % SIGNS.length];
+      const sign = SIGNS[hash(key) % SIGNS.length];
+      line += sign;
+      gridHit(v.s, sign, t);
       dirty = true;
     }
     last = time;
