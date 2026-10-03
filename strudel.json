@@ -1,8 +1,58 @@
 {
   "_base": "https://raw.githubusercontent.com/undo-despot/haspyd-samples/main/",
+  "long_dreeeeam": [
+    "found/SFX/long_dreeeeam/00.wav",
+    "found/SFX/long_dreeeeam/01.wav",
+    "found/SFX/long_dreeeeam/02.wav",
+    "found/SFX/long_dreeeeam/03.wav"
+  ],
+  "metamorphosis": [
+    "found/SFX/metamorphosis/00.wav",
+    "found/SFX/metamorphosis/01.wav",
+    "found/SFX/metamorphosis/02.wav",
+    "found/SFX/metamorphosis/03.wav"
+  ],
+  "take_1_lyon": [
+    "found/SFX/take_1_lyon/00.wav",
+    "found/SFX/take_1_lyon/01.wav",
+    "found/SFX/take_1_lyon/02.wav",
+    "found/SFX/take_1_lyon/03.wav"
+  ],
+  "uhjv": [
+    "found/SFX/uhjv/00.wav",
+    "found/SFX/uhjv/01.wav",
+    "found/SFX/uhjv/02.wav",
+    "found/SFX/uhjv/03.wav"
+  ],
+  "vinyl_dead": [
+    "found/SFX/vinyl_dead/00.wav",
+    "found/SFX/vinyl_dead/01.wav",
+    "found/SFX/vinyl_dead/02.wav",
+    "found/SFX/vinyl_dead/03.wav"
+  ],
   "ae_kick": [
     "found/autechre/ae_kick/SPSKikA.WAV",
     "found/autechre/ae_kick/SPSKikB.WAV"
+  ],
+  "rswbreakpp": [
+    "found/autechre/ae_loop/rswbreakpp/00.wav",
+    "found/autechre/ae_loop/rswbreakpp/01.wav",
+    "found/autechre/ae_loop/rswbreakpp/02.wav",
+    "found/autechre/ae_loop/rswbreakpp/03.wav",
+    "found/autechre/ae_loop/rswbreakpp/04.wav",
+    "found/autechre/ae_loop/rswbreakpp/05.wav",
+    "found/autechre/ae_loop/rswbreakpp/06.wav",
+    "found/autechre/ae_loop/rswbreakpp/07.wav"
+  ],
+  "shistasample06pp": [
+    "found/autechre/ae_loop/shistasample06pp/00.wav",
+    "found/autechre/ae_loop/shistasample06pp/01.wav",
+    "found/autechre/ae_loop/shistasample06pp/02.wav",
+    "found/autechre/ae_loop/shistasample06pp/03.wav",
+    "found/autechre/ae_loop/shistasample06pp/04.wav",
+    "found/autechre/ae_loop/shistasample06pp/05.wav",
+    "found/autechre/ae_loop/shistasample06pp/06.wav",
+    "found/autechre/ae_loop/shistasample06pp/07.wav"
   ],
   "ae_mell": [
     "found/autechre/ae_mell/Mell String A2.WAV",
@@ -182,8 +232,78 @@
     "found/autechre/ae_vox/myAARGH.WAV",
     "found/autechre/ae_vox/myAARGH2.WAV"
   ],
+  "bass_4": [
+    "found/bass/bass_4/00.wav",
+    "found/bass/bass_4/01.wav",
+    "found/bass/bass_4/02.wav",
+    "found/bass/bass_4/03.wav",
+    "found/bass/bass_4/04.wav",
+    "found/bass/bass_4/05.wav",
+    "found/bass/bass_4/06.wav",
+    "found/bass/bass_4/07.wav"
+  ],
+  "bass_5": [
+    "found/bass/bass_5/00.wav",
+    "found/bass/bass_5/01.wav",
+    "found/bass/bass_5/02.wav",
+    "found/bass/bass_5/03.wav",
+    "found/bass/bass_5/04.wav",
+    "found/bass/bass_5/05.wav",
+    "found/bass/bass_5/06.wav",
+    "found/bass/bass_5/07.wav"
+  ],
+  "flex_low": [
+    "found/bass/flex_low/00.wav",
+    "found/bass/flex_low/01.wav",
+    "found/bass/flex_low/02.wav",
+    "found/bass/flex_low/03.wav",
+    "found/bass/flex_low/04.wav",
+    "found/bass/flex_low/05.wav",
+    "found/bass/flex_low/06.wav",
+    "found/bass/flex_low/07.wav"
+  ],
+  "low_dub_2": [
+    "found/bass/low_dub_2/00.wav",
+    "found/bass/low_dub_2/01.wav",
+    "found/bass/low_dub_2/02.wav",
+    "found/bass/low_dub_2/03.wav",
+    "found/bass/low_dub_2/04.wav",
+    "found/bass/low_dub_2/05.wav",
+    "found/bass/low_dub_2/06.wav",
+    "found/bass/low_dub_2/07.wav"
+  ],
   "beat": [
     "found/beat/as22edafa.mp3"
+  ],
+  "beat_10": [
+    "found/beat/beat_10/00.wav",
+    "found/beat/beat_10/01.wav",
+    "found/beat/beat_10/02.wav",
+    "found/beat/beat_10/03.wav",
+    "found/beat/beat_10/04.wav",
+    "found/beat/beat_10/05.wav",
+    "found/beat/beat_10/06.wav",
+    "found/beat/beat_10/07.wav"
+  ],
+  "beat_8": [
+    "found/beat/beat_8/00.wav",
+    "found/beat/beat_8/01.wav",
+    "found/beat/beat_8/02.wav",
+    "found/beat/beat_8/03.wav",
+    "found/beat/beat_8/04.wav",
+    "found/beat/beat_8/05.wav",
+    "found/beat/beat_8/06.wav",
+    "found/beat/beat_8/07.wav"
+  ],
+  "trip_hop": [
+    "found/beat/trip_hop/00.wav",
+    "found/beat/trip_hop/01.wav",
+    "found/beat/trip_hop/02.wav",
+    "found/beat/trip_hop/03.wav",
+    "found/beat/trip_hop/04.wav",
+    "found/beat/trip_hop/05.wav",
+    "found/beat/trip_hop/06.wav",
+    "found/beat/trip_hop/07.wav"
   ],
   "fs_atmo": [
     "found/freesound/fs_atmo/204509__vectorspace__fan-industrial.wav",
@@ -191,12 +311,144 @@
     "found/freesound/fs_atmo/652846__misticalsounds2o__industrial-fan-single-blade-2.wav",
     "found/freesound/fs_atmo/664625__cpfcfan10__background-industrial-ambiance.wav"
   ],
+  "eerie_ambience": [
+    "found/freesound/fs_atmo/eerie_ambience/00.wav",
+    "found/freesound/fs_atmo/eerie_ambience/01.wav",
+    "found/freesound/fs_atmo/eerie_ambience/02.wav",
+    "found/freesound/fs_atmo/eerie_ambience/03.wav"
+  ],
+  "machine_atmo": [
+    "found/freesound/fs_atmo/machine_atmo/00.wav",
+    "found/freesound/fs_atmo/machine_atmo/01.wav",
+    "found/freesound/fs_atmo/machine_atmo/02.wav",
+    "found/freesound/fs_atmo/machine_atmo/03.wav",
+    "found/freesound/fs_atmo/machine_atmo/04.wav",
+    "found/freesound/fs_atmo/machine_atmo/05.wav"
+  ],
+  "spring_ir": [
+    "found/freesound/fs_atmo/spring_ir/00.wav",
+    "found/freesound/fs_atmo/spring_ir/01.wav",
+    "found/freesound/fs_atmo/spring_ir/02.wav",
+    "found/freesound/fs_atmo/spring_ir/03.wav",
+    "found/freesound/fs_atmo/spring_ir/04.wav",
+    "found/freesound/fs_atmo/spring_ir/05.wav"
+  ],
   "fs_beat": [
     "found/freesound/fs_beat/460038__clemza__industrial-beat-70bpm.wav"
+  ],
+  "clap_delay": [
+    "found/freesound/fs_beat/clap_delay/00.wav",
+    "found/freesound/fs_beat/clap_delay/01.wav",
+    "found/freesound/fs_beat/clap_delay/02.wav",
+    "found/freesound/fs_beat/clap_delay/03.wav",
+    "found/freesound/fs_beat/clap_delay/04.wav",
+    "found/freesound/fs_beat/clap_delay/05.wav",
+    "found/freesound/fs_beat/clap_delay/06.wav",
+    "found/freesound/fs_beat/clap_delay/07.wav"
+  ],
+  "club_bass": [
+    "found/freesound/fs_beat/club_bass/00.wav",
+    "found/freesound/fs_beat/club_bass/01.wav",
+    "found/freesound/fs_beat/club_bass/02.wav",
+    "found/freesound/fs_beat/club_bass/03.wav",
+    "found/freesound/fs_beat/club_bass/04.wav",
+    "found/freesound/fs_beat/club_bass/05.wav",
+    "found/freesound/fs_beat/club_bass/06.wav",
+    "found/freesound/fs_beat/club_bass/07.wav"
+  ],
+  "creepy_loop": [
+    "found/freesound/fs_beat/creepy_loop/00.wav",
+    "found/freesound/fs_beat/creepy_loop/01.wav",
+    "found/freesound/fs_beat/creepy_loop/02.wav",
+    "found/freesound/fs_beat/creepy_loop/03.wav",
+    "found/freesound/fs_beat/creepy_loop/04.wav",
+    "found/freesound/fs_beat/creepy_loop/05.wav",
+    "found/freesound/fs_beat/creepy_loop/06.wav",
+    "found/freesound/fs_beat/creepy_loop/07.wav"
+  ],
+  "true_face_drums": [
+    "found/freesound/fs_beat/true_face_drums/00.wav",
+    "found/freesound/fs_beat/true_face_drums/01.wav",
+    "found/freesound/fs_beat/true_face_drums/02.wav",
+    "found/freesound/fs_beat/true_face_drums/03.wav",
+    "found/freesound/fs_beat/true_face_drums/04.wav",
+    "found/freesound/fs_beat/true_face_drums/05.wav",
+    "found/freesound/fs_beat/true_face_drums/06.wav",
+    "found/freesound/fs_beat/true_face_drums/07.wav",
+    "found/freesound/fs_beat/true_face_drums/08.wav",
+    "found/freesound/fs_beat/true_face_drums/09.wav",
+    "found/freesound/fs_beat/true_face_drums/10.wav",
+    "found/freesound/fs_beat/true_face_drums/11.wav",
+    "found/freesound/fs_beat/true_face_drums/12.wav",
+    "found/freesound/fs_beat/true_face_drums/13.wav",
+    "found/freesound/fs_beat/true_face_drums/14.wav",
+    "found/freesound/fs_beat/true_face_drums/15.wav"
+  ],
+  "world_drums": [
+    "found/freesound/fs_beat/world_drums/00.wav",
+    "found/freesound/fs_beat/world_drums/01.wav",
+    "found/freesound/fs_beat/world_drums/02.wav",
+    "found/freesound/fs_beat/world_drums/03.wav",
+    "found/freesound/fs_beat/world_drums/04.wav",
+    "found/freesound/fs_beat/world_drums/05.wav",
+    "found/freesound/fs_beat/world_drums/06.wav",
+    "found/freesound/fs_beat/world_drums/07.wav",
+    "found/freesound/fs_beat/world_drums/08.wav",
+    "found/freesound/fs_beat/world_drums/09.wav",
+    "found/freesound/fs_beat/world_drums/10.wav",
+    "found/freesound/fs_beat/world_drums/11.wav",
+    "found/freesound/fs_beat/world_drums/12.wav",
+    "found/freesound/fs_beat/world_drums/13.wav",
+    "found/freesound/fs_beat/world_drums/14.wav",
+    "found/freesound/fs_beat/world_drums/15.wav"
   ],
   "fs_fx": [
     "found/freesound/fs_fx/333832__nick121087__demonic-woman-scream.wav",
     "found/freesound/fs_fx/537797__phoenixsoftware__industry_smack.wav"
+  ],
+  "eye_tracker_1": [
+    "found/freesound/fs_fx/eye_tracker_1/00.wav",
+    "found/freesound/fs_fx/eye_tracker_1/01.wav",
+    "found/freesound/fs_fx/eye_tracker_1/02.wav",
+    "found/freesound/fs_fx/eye_tracker_1/03.wav",
+    "found/freesound/fs_fx/eye_tracker_1/04.wav",
+    "found/freesound/fs_fx/eye_tracker_1/05.wav",
+    "found/freesound/fs_fx/eye_tracker_1/06.wav",
+    "found/freesound/fs_fx/eye_tracker_1/07.wav"
+  ],
+  "eye_tracker_2": [
+    "found/freesound/fs_fx/eye_tracker_2/00.wav",
+    "found/freesound/fs_fx/eye_tracker_2/01.wav",
+    "found/freesound/fs_fx/eye_tracker_2/02.wav",
+    "found/freesound/fs_fx/eye_tracker_2/03.wav",
+    "found/freesound/fs_fx/eye_tracker_2/04.wav",
+    "found/freesound/fs_fx/eye_tracker_2/05.wav",
+    "found/freesound/fs_fx/eye_tracker_2/06.wav",
+    "found/freesound/fs_fx/eye_tracker_2/07.wav"
+  ],
+  "eye_tracker_3": [
+    "found/freesound/fs_fx/eye_tracker_3/00.wav",
+    "found/freesound/fs_fx/eye_tracker_3/01.wav",
+    "found/freesound/fs_fx/eye_tracker_3/02.wav",
+    "found/freesound/fs_fx/eye_tracker_3/03.wav",
+    "found/freesound/fs_fx/eye_tracker_3/04.wav",
+    "found/freesound/fs_fx/eye_tracker_3/05.wav",
+    "found/freesound/fs_fx/eye_tracker_3/06.wav",
+    "found/freesound/fs_fx/eye_tracker_3/07.wav"
+  ],
+  "fs_harp": [
+    "found/freesound/fs_fx/fs_harp/00.wav",
+    "found/freesound/fs_fx/fs_harp/01.wav",
+    "found/freesound/fs_fx/fs_harp/02.wav",
+    "found/freesound/fs_fx/fs_harp/03.wav",
+    "found/freesound/fs_fx/fs_harp/04.wav",
+    "found/freesound/fs_fx/fs_harp/05.wav",
+    "found/freesound/fs_fx/fs_harp/06.wav",
+    "found/freesound/fs_fx/fs_harp/07.wav",
+    "found/freesound/fs_fx/fs_harp/08.wav",
+    "found/freesound/fs_fx/fs_harp/09.wav",
+    "found/freesound/fs_fx/fs_harp/10.wav",
+    "found/freesound/fs_fx/fs_harp/11.wav"
   ],
   "high-sfx": [
     "found/high-sfx/double damage.mp3",
@@ -205,8 +457,232 @@
     "found/high-sfx/we2132s-24b_1.wav",
     "found/high-sfx/малив2323-24b.wav"
   ],
+  "afeas2313": [
+    "found/high-sfx/afeas2313/00.wav",
+    "found/high-sfx/afeas2313/01.wav",
+    "found/high-sfx/afeas2313/02.wav",
+    "found/high-sfx/afeas2313/03.wav",
+    "found/high-sfx/afeas2313/04.wav",
+    "found/high-sfx/afeas2313/05.wav",
+    "found/high-sfx/afeas2313/06.wav",
+    "found/high-sfx/afeas2313/07.wav",
+    "found/high-sfx/afeas2313/08.wav",
+    "found/high-sfx/afeas2313/09.wav",
+    "found/high-sfx/afeas2313/10.wav",
+    "found/high-sfx/afeas2313/11.wav"
+  ],
+  "hgznm_3": [
+    "found/high-sfx/hgznm_3/00.wav",
+    "found/high-sfx/hgznm_3/01.wav",
+    "found/high-sfx/hgznm_3/02.wav",
+    "found/high-sfx/hgznm_3/03.wav",
+    "found/high-sfx/hgznm_3/04.wav",
+    "found/high-sfx/hgznm_3/05.wav",
+    "found/high-sfx/hgznm_3/06.wav"
+  ],
+  "hi_2": [
+    "found/high-sfx/hi_2/00.wav",
+    "found/high-sfx/hi_2/01.wav",
+    "found/high-sfx/hi_2/02.wav",
+    "found/high-sfx/hi_2/03.wav",
+    "found/high-sfx/hi_2/04.wav",
+    "found/high-sfx/hi_2/05.wav",
+    "found/high-sfx/hi_2/06.wav",
+    "found/high-sfx/hi_2/07.wav"
+  ],
+  "hi_231edaswe1231313": [
+    "found/high-sfx/hi_231edaswe1231313/00.wav",
+    "found/high-sfx/hi_231edaswe1231313/01.wav",
+    "found/high-sfx/hi_231edaswe1231313/02.wav",
+    "found/high-sfx/hi_231edaswe1231313/03.wav",
+    "found/high-sfx/hi_231edaswe1231313/04.wav",
+    "found/high-sfx/hi_231edaswe1231313/05.wav",
+    "found/high-sfx/hi_231edaswe1231313/06.wav",
+    "found/high-sfx/hi_231edaswe1231313/07.wav",
+    "found/high-sfx/hi_231edaswe1231313/08.wav",
+    "found/high-sfx/hi_231edaswe1231313/09.wav",
+    "found/high-sfx/hi_231edaswe1231313/10.wav",
+    "found/high-sfx/hi_231edaswe1231313/11.wav"
+  ],
+  "hi_9": [
+    "found/high-sfx/hi_9/00.wav",
+    "found/high-sfx/hi_9/01.wav",
+    "found/high-sfx/hi_9/02.wav",
+    "found/high-sfx/hi_9/03.wav",
+    "found/high-sfx/hi_9/04.wav",
+    "found/high-sfx/hi_9/05.wav",
+    "found/high-sfx/hi_9/06.wav"
+  ],
+  "j2321sdq": [
+    "found/high-sfx/j2321sdq/00.wav",
+    "found/high-sfx/j2321sdq/01.wav",
+    "found/high-sfx/j2321sdq/02.wav",
+    "found/high-sfx/j2321sdq/03.wav",
+    "found/high-sfx/j2321sdq/04.wav",
+    "found/high-sfx/j2321sdq/05.wav",
+    "found/high-sfx/j2321sdq/06.wav",
+    "found/high-sfx/j2321sdq/07.wav"
+  ],
+  "jgznm_2": [
+    "found/high-sfx/jgznm_2/00.wav",
+    "found/high-sfx/jgznm_2/01.wav",
+    "found/high-sfx/jgznm_2/02.wav",
+    "found/high-sfx/jgznm_2/03.wav",
+    "found/high-sfx/jgznm_2/04.wav",
+    "found/high-sfx/jgznm_2/05.wav",
+    "found/high-sfx/jgznm_2/06.wav",
+    "found/high-sfx/jgznm_2/07.wav"
+  ],
+  "sphere_of_malecules": [
+    "found/high-sfx/sphere_of_malecules/00.wav",
+    "found/high-sfx/sphere_of_malecules/01.wav",
+    "found/high-sfx/sphere_of_malecules/02.wav",
+    "found/high-sfx/sphere_of_malecules/03.wav",
+    "found/high-sfx/sphere_of_malecules/04.wav",
+    "found/high-sfx/sphere_of_malecules/05.wav",
+    "found/high-sfx/sphere_of_malecules/06.wav",
+    "found/high-sfx/sphere_of_malecules/07.wav"
+  ],
   "keys": [
     "found/keys/Classic Electric Piano_1.wav"
+  ],
+  "radio_11175_0259": [
+    "found/radio/radio_11175_0259/00.wav",
+    "found/radio/radio_11175_0259/01.wav",
+    "found/radio/radio_11175_0259/02.wav",
+    "found/radio/radio_11175_0259/03.wav"
+  ],
+  "radio_13500_1844": [
+    "found/radio/radio_13500_1844/00.wav",
+    "found/radio/radio_13500_1844/01.wav",
+    "found/radio/radio_13500_1844/02.wav",
+    "found/radio/radio_13500_1844/03.wav"
+  ],
+  "radio_7105_1847": [
+    "found/radio/radio_7105_1847/00.wav",
+    "found/radio/radio_7105_1847/01.wav",
+    "found/radio/radio_7105_1847/02.wav",
+    "found/radio/radio_7105_1847/03.wav",
+    "found/radio/radio_7105_1847/04.wav",
+    "found/radio/radio_7105_1847/05.wav"
+  ],
+  "radio_7105_1850": [
+    "found/radio/radio_7105_1850/00.wav",
+    "found/radio/radio_7105_1850/01.wav",
+    "found/radio/radio_7105_1850/02.wav",
+    "found/radio/radio_7105_1850/03.wav",
+    "found/radio/radio_7105_1850/04.wav",
+    "found/radio/radio_7105_1850/05.wav"
+  ],
+  "radio_7105_1853": [
+    "found/radio/radio_7105_1853/00.wav",
+    "found/radio/radio_7105_1853/01.wav",
+    "found/radio/radio_7105_1853/02.wav",
+    "found/radio/radio_7105_1853/03.wav",
+    "found/radio/radio_7105_1853/04.wav",
+    "found/radio/radio_7105_1853/05.wav"
+  ],
+  "radio_8105_0845": [
+    "found/radio/radio_8105_0845/00.wav",
+    "found/radio/radio_8105_0845/01.wav",
+    "found/radio/radio_8105_0845/02.wav",
+    "found/radio/radio_8105_0845/03.wav"
+  ],
+  "sp_ambi": [
+    "found/sonicpi/sp_ambi/ambi_dark_woosh.flac",
+    "found/sonicpi/sp_ambi/ambi_drone.flac",
+    "found/sonicpi/sp_ambi/ambi_lunar_land.flac",
+    "found/sonicpi/sp_ambi/ambi_sauna.flac",
+    "found/sonicpi/sp_ambi/ambi_soft_buzz.flac",
+    "found/sonicpi/sp_ambi/ambi_swoosh.flac"
+  ],
+  "sp_arovane": [
+    "found/sonicpi/sp_arovane/arovane_beat_a.flac",
+    "found/sonicpi/sp_arovane/arovane_beat_b.flac",
+    "found/sonicpi/sp_arovane/arovane_beat_c.flac",
+    "found/sonicpi/sp_arovane/arovane_beat_d.flac",
+    "found/sonicpi/sp_arovane/arovane_beat_e.flac"
+  ],
+  "sp_bell": [
+    "found/sonicpi/sp_bell/elec_bell.flac",
+    "found/sonicpi/sp_bell/elec_chime.flac",
+    "found/sonicpi/sp_bell/elec_ping.flac",
+    "found/sonicpi/sp_bell/elec_triangle.flac",
+    "found/sonicpi/sp_bell/perc_bell.flac"
+  ],
+  "sp_choir": [
+    "found/sonicpi/sp_choir/ambi_choir.flac"
+  ],
+  "sp_glass": [
+    "found/sonicpi/sp_glass/ambi_glass_hum.flac",
+    "found/sonicpi/sp_glass/ambi_glass_rub.flac",
+    "found/sonicpi/sp_glass/ambi_haunted_hum.flac"
+  ],
+  "sp_glitch": [
+    "found/sonicpi/sp_glitch/glitch_bass_g.flac"
+  ],
+  "sp_impact": [
+    "found/sonicpi/sp_impact/misc_cineboom.flac",
+    "found/sonicpi/sp_impact/perc_door.flac",
+    "found/sonicpi/sp_impact/perc_till.flac"
+  ],
+  "synth_12": [
+    "found/synth/synth_12/00.wav",
+    "found/synth/synth_12/01.wav",
+    "found/synth/synth_12/02.wav",
+    "found/synth/synth_12/03.wav",
+    "found/synth/synth_12/04.wav",
+    "found/synth/synth_12/05.wav",
+    "found/synth/synth_12/06.wav",
+    "found/synth/synth_12/07.wav"
+  ],
+  "synth_13": [
+    "found/synth/synth_13/00.wav",
+    "found/synth/synth_13/01.wav",
+    "found/synth/synth_13/02.wav",
+    "found/synth/synth_13/03.wav",
+    "found/synth/synth_13/04.wav",
+    "found/synth/synth_13/05.wav",
+    "found/synth/synth_13/06.wav",
+    "found/synth/synth_13/07.wav"
+  ],
+  "synth_14": [
+    "found/synth/synth_14/00.wav",
+    "found/synth/synth_14/01.wav",
+    "found/synth/synth_14/02.wav",
+    "found/synth/synth_14/03.wav",
+    "found/synth/synth_14/04.wav",
+    "found/synth/synth_14/05.wav",
+    "found/synth/synth_14/06.wav",
+    "found/synth/synth_14/07.wav"
+  ],
+  "synth_15": [
+    "found/synth/synth_15/00.wav",
+    "found/synth/synth_15/01.wav",
+    "found/synth/synth_15/02.wav",
+    "found/synth/synth_15/03.wav",
+    "found/synth/synth_15/04.wav",
+    "found/synth/synth_15/05.wav",
+    "found/synth/synth_15/06.wav"
+  ],
+  "synth_3": [
+    "found/synth/synth_3/00.wav",
+    "found/synth/synth_3/01.wav",
+    "found/synth/synth_3/02.wav",
+    "found/synth/synth_3/03.wav",
+    "found/synth/synth_3/04.wav",
+    "found/synth/synth_3/05.wav",
+    "found/synth/synth_3/06.wav",
+    "found/synth/synth_3/07.wav"
+  ],
+  "synth_7": [
+    "found/synth/synth_7/00.wav",
+    "found/synth/synth_7/01.wav",
+    "found/synth/synth_7/02.wav",
+    "found/synth/synth_7/03.wav",
+    "found/synth/synth_7/04.wav",
+    "found/synth/synth_7/05.wav",
+    "found/synth/synth_7/06.wav"
   ],
   "voice": [
     "found/voice/live 19_bip.wav",
@@ -215,5 +691,144 @@
     "found/voice/live 19_bip_7.wav",
     "found/voice/live 19_bip_8.wav",
     "found/voice/live 19_bip_9.wav"
+  ],
+  "bip_1": [
+    "found/voice/bip_1/00.wav",
+    "found/voice/bip_1/01.wav",
+    "found/voice/bip_1/02.wav",
+    "found/voice/bip_1/03.wav",
+    "found/voice/bip_1/04.wav",
+    "found/voice/bip_1/05.wav",
+    "found/voice/bip_1/06.wav",
+    "found/voice/bip_1/07.wav"
+  ],
+  "bip_10": [
+    "found/voice/bip_10/00.wav",
+    "found/voice/bip_10/01.wav",
+    "found/voice/bip_10/02.wav",
+    "found/voice/bip_10/03.wav",
+    "found/voice/bip_10/04.wav",
+    "found/voice/bip_10/05.wav",
+    "found/voice/bip_10/06.wav",
+    "found/voice/bip_10/07.wav"
+  ],
+  "bip_11": [
+    "found/voice/bip_11/00.wav",
+    "found/voice/bip_11/01.wav",
+    "found/voice/bip_11/02.wav",
+    "found/voice/bip_11/03.wav",
+    "found/voice/bip_11/04.wav",
+    "found/voice/bip_11/05.wav",
+    "found/voice/bip_11/06.wav",
+    "found/voice/bip_11/07.wav"
+  ],
+  "bip_12": [
+    "found/voice/bip_12/00.wav",
+    "found/voice/bip_12/01.wav",
+    "found/voice/bip_12/02.wav",
+    "found/voice/bip_12/03.wav",
+    "found/voice/bip_12/04.wav",
+    "found/voice/bip_12/05.wav",
+    "found/voice/bip_12/06.wav",
+    "found/voice/bip_12/07.wav"
+  ],
+  "bip_2": [
+    "found/voice/bip_2/00.wav",
+    "found/voice/bip_2/01.wav",
+    "found/voice/bip_2/02.wav",
+    "found/voice/bip_2/03.wav",
+    "found/voice/bip_2/04.wav",
+    "found/voice/bip_2/05.wav",
+    "found/voice/bip_2/06.wav",
+    "found/voice/bip_2/07.wav"
+  ],
+  "bip_3": [
+    "found/voice/bip_3/00.wav",
+    "found/voice/bip_3/01.wav",
+    "found/voice/bip_3/02.wav",
+    "found/voice/bip_3/03.wav",
+    "found/voice/bip_3/04.wav",
+    "found/voice/bip_3/05.wav",
+    "found/voice/bip_3/06.wav",
+    "found/voice/bip_3/07.wav"
+  ],
+  "bip_6": [
+    "found/voice/bip_6/00.wav",
+    "found/voice/bip_6/01.wav",
+    "found/voice/bip_6/02.wav",
+    "found/voice/bip_6/03.wav",
+    "found/voice/bip_6/04.wav",
+    "found/voice/bip_6/05.wav",
+    "found/voice/bip_6/06.wav",
+    "found/voice/bip_6/07.wav"
+  ],
+  "vs_buzz": [
+    "found/vsco/vs_buzz/00_f1.wav",
+    "found/vsco/vs_buzz/01_g1.wav",
+    "found/vsco/vs_buzz/02_a1.wav",
+    "found/vsco/vs_buzz/03_as1.wav",
+    "found/vsco/vs_buzz/04_c2.wav",
+    "found/vsco/vs_buzz/05_d2.wav",
+    "found/vsco/vs_buzz/06_ds2.wav",
+    "found/vsco/vs_buzz/07_f2.wav",
+    "found/vsco/vs_buzz/08_g2.wav",
+    "found/vsco/vs_buzz/09_a2.wav"
+  ],
+  "vs_fall": [
+    "found/vsco/vs_fall/00_g1.wav",
+    "found/vsco/vs_fall/01_a1.wav",
+    "found/vsco/vs_fall/02_as1.wav",
+    "found/vsco/vs_fall/03_c2.wav",
+    "found/vsco/vs_fall/04_d2.wav",
+    "found/vsco/vs_fall/05_e2.wav",
+    "found/vsco/vs_fall/06_f2.wav",
+    "found/vsco/vs_fall/07_g2.wav",
+    "found/vsco/vs_fall/08_a2.wav",
+    "found/vsco/vs_fall/09_b2.wav"
+  ],
+  "vs_horn": [
+    "found/vsco/vs_horn/00_c1.wav",
+    "found/vsco/vs_horn/01_ds1.wav",
+    "found/vsco/vs_horn/02_g1.wav",
+    "found/vsco/vs_horn/03_as1.wav",
+    "found/vsco/vs_horn/04_d2.wav",
+    "found/vsco/vs_horn/05_f2.wav",
+    "found/vsco/vs_horn/06_a2.wav",
+    "found/vsco/vs_horn/07_c3.wav",
+    "found/vsco/vs_horn/08_d4.wav",
+    "found/vsco/vs_horn/09_f4.wav"
+  ],
+  "vs_mute": [
+    "found/vsco/vs_mute/00_as2.wav",
+    "found/vsco/vs_mute/01_c3.wav",
+    "found/vsco/vs_mute/02_ds3.wav",
+    "found/vsco/vs_mute/03_gs3.wav",
+    "found/vsco/vs_mute/04_as3.wav",
+    "found/vsco/vs_mute/05_d4.wav",
+    "found/vsco/vs_mute/06_f4.wav",
+    "found/vsco/vs_mute/07_a4.wav"
+  ],
+  "vs_trumpet": [
+    "found/vsco/vs_trumpet/00_f2.wav",
+    "found/vsco/vs_trumpet/01_a2.wav",
+    "found/vsco/vs_trumpet/02_c3.wav",
+    "found/vsco/vs_trumpet/03_ds3.wav",
+    "found/vsco/vs_trumpet/04_f3.wav",
+    "found/vsco/vs_trumpet/05_g3.wav",
+    "found/vsco/vs_trumpet/06_as3.wav",
+    "found/vsco/vs_trumpet/07_d4.wav",
+    "found/vsco/vs_trumpet/08_f4.wav",
+    "found/vsco/vs_trumpet/09_a4.wav",
+    "found/vsco/vs_trumpet/10_c5.wav"
+  ],
+  "vs_tuba": [
+    "found/vsco/vs_tuba/00_as0.wav",
+    "found/vsco/vs_tuba/01_ds1.wav",
+    "found/vsco/vs_tuba/02_f1.wav",
+    "found/vsco/vs_tuba/03_as1.wav",
+    "found/vsco/vs_tuba/04_d2.wav",
+    "found/vsco/vs_tuba/05_f2.wav",
+    "found/vsco/vs_tuba/06_as2.wav",
+    "found/vsco/vs_tuba/07_d3.wav"
   ]
 }
