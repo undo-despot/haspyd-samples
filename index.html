@@ -73,9 +73,9 @@
     font: 300 14px/1 var(--mono); color: var(--dim);
     overflow: hidden; user-select: none;
   }
-  #cells { display: grid; grid-template-columns: 10ch repeat(32, 2.1ch); grid-auto-rows: 2.1ch; align-content: start; overflow: hidden; }
+  #cells { display: grid; grid-template-columns: 17ch repeat(32, 2.1ch); grid-auto-rows: 2.1ch; align-content: start; overflow: hidden; }
   #cells span { display: block; text-align: center; line-height: 2.1ch; height: 2.1ch; }
-  #cells .name { text-align: left; color: var(--bone); white-space: nowrap; overflow: hidden; }
+  #cells .name { text-align: left; color: var(--bone); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 1ch; }
   #cells .ph { color: var(--bone); }
   #cells .old { color: #8a8474; }
   #cells .on { color: var(--brass); }
