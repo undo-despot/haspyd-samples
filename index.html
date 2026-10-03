@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>haspyd ᚼ strudel</title>
+<meta name="description" content="Strudel Аліси Хаспид: живий код зі знайденими й власними звуками.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  /* Кольори й шрифт: міняй тут, і зміниться все. */
+  html:root {
+    --ink: #000000;
+    --bone: #d9d2c0;
+    --dim: #6f6a5e;
+    --brass: #c8a13a;
+    --oxide: #c2553a;
+    --mono: "Martian Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --size: 16px;
+
+    /* змінні, які читає сам Strudel */
+    --foreground: var(--brass) !important;
+    --background: var(--ink) !important;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; background: var(--ink); }
+  body {
+    color: var(--bone);
+    font: 300 13px/1.5 var(--mono);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    overflow: hidden;
+  }
+
+  /* верхній рядок */
+  header {
+    display: flex; align-items: baseline; gap: 2ch;
+    padding: 10px 16px 8px;
+    border-bottom: 1px solid var(--dim);
+  }
+  header h1 { font: inherit; font-weight: 600; margin: 0; letter-spacing: .02em; }
+  header h1 span { color: var(--brass); }
+  header .gap { flex: 1; }
+  button {
+    font: inherit; color: var(--bone); background: none;
+    border: 1px solid var(--dim); padding: 2px 1.2ch; cursor: pointer;
+  }
+  button:hover { border-color: var(--bone); }
+  button:focus-visible, .cm-editor:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  #play { min-width: 9ch; text-align: left; }
+  #play[aria-pressed="true"] { color: var(--ink); background: var(--brass); border-color: var(--brass); font-weight: 600; }
+
+  /* редактор */
+  main { min-height: 0; overflow: auto; padding: 12px 4px 12px 0; }
+  main > div { font-family: var(--mono) !important; }
+  .cm-editor { background: transparent !important; color: var(--bone) !important; }
+  .cm-editor .cm-scroller { font-family: var(--mono) !important; font-weight: 300; line-height: 1.65; }
+  .cm-editor .cm-gutters { background: transparent !important; color: var(--dim) !important; border: 0 !important; }
+  .cm-editor .cm-cursor { border-left: 2px solid var(--brass) !important; }
+  .cm-editor.cm-focused { outline: none !important; }
+  .cm-editor .cm-selectionBackground,
+  .cm-editor .cm-content ::selection { background: #c8a13a44 !important; }
+
+  /* письмо: музика пише рядок знаків */
+  #script {
+    border-top: 1px solid var(--dim);
+    height: 3.2em; line-height: 3.2em;
+    font-size: 22px; color: var(--brass);
+    display: flex; justify-content: flex-end; overflow: hidden;
+    padding: 0 16px;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 35%);
+            mask-image: linear-gradient(to right, transparent, #000 35%);
+    user-select: none;
+  }
+  #glyphs { flex: none; white-space: pre; }
+
+  /* нижній рядок */
+  footer {
+    display: flex; gap: 3ch; flex-wrap: wrap;
+    padding: 6px 16px 9px; color: var(--dim);
+    border-top: 1px solid var(--dim);
+  }
+  footer kbd { font: inherit; color: var(--bone); }
+  #status { margin-left: auto; color: var(--bone); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #status.err { color: var(--oxide); }
+
+  @media (max-width: 640px) {
+    header { flex-wrap: wrap; row-gap: 6px; }
+    footer .keys { display: none; }
+    #script { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>haspyd <span aria-hidden="true">ᚼ</span> strudel</h1>
+  <span class="gap"></span>
+  <button id="smaller" aria-label="Менший шрифт">A−</button>
+  <button id="bigger" aria-label="Більший шрифт">A+</button>
+  <button id="play" aria-pressed="false">▷ грати</button>
+</header>
+
+<main id="stage"></main>
+
+<div id="script" aria-hidden="true"><span id="glyphs"></span></div>
+
+<footer>
+  <span class="keys"><kbd>ctrl</kbd>+<kbd>enter</kbd> грати / оновити</span>
+  <span class="keys"><kbd>ctrl</kbd>+<kbd>.</kbd> стоп</span>
+  <span id="status">завантажую звуки…</span>
+</footer>
+
+<script src="vendor/strudel/index.js"></script>
+<script>
+(() => {
+  const DEFAULT_CODE = `samples('github:undo-despot/haspyd-samples')
+setcpm(33)
+
+$: s("ae_kick(<3 5 3 7>,16,<0 2 0 5>)")
+  .n("<0 0 1 0>").shape(.3)
+  .linger("<1 1 1 .5 1 1 .25 1>")
+
+$: s("ae_sh09*<8 12 16 6>").n(1)
+  .gain(perlin.range(.15, .55)).pan(sine.fast(3)).hpf(3000)
+
+$: s("ae_steel*16").n(irand(63))
+  .degradeBy(.35).ribbon(7, 2)
+  .pan(rand).cut(1).gain(.6)
+
+$: s("ae_mell").n("<[0,5] [3,7] [1,9] [6,11]>")
+  .slow(2).speed(.5).attack(.4).release(1.5)
+  .lpf(sine.range(400, 3000).slow(16))
+  .room(.9).roomsize(6).gain(.5)
+`;
+
+  const store = {
+    get(k, d) { try { return localStorage.getItem(k) ?? d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const status = (text, err = false) => { $('status').textContent = text; $('status').classList.toggle('err', err); };
+
+  // ── редактор ─────────────────────────────────────────────
+  const el = document.createElement('strudel-editor');
+  el.setAttribute('code', store.get('haspyd-code', DEFAULT_CODE));
+  $('stage').append(el);
+
+  let size = Number(store.get('haspyd-size', 16)) || 16;
+  const ed = el.editor;
+  if (!ed) { status('редактор не завантажився — онови сторінку', true); return; }
+
+  const applySettings = () => ed.updateSettings({
+    keybindings: 'codemirror',
+    theme: 'blackscreen',
+    fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--mono'),
+    fontSize: size,
+    isLineNumbersDisplayed: true,
+    isLineWrappingEnabled: true,
+    isBracketClosingEnabled: true,
+    isBracketMatchingEnabled: false,
+    isActiveLineHighlighted: false,
+    isPatternHighlightingEnabled: true,
+    isFlashEnabled: true,
+    isAutoCompletionEnabled: false,
+    isTooltipEnabled: false,
+    isTabIndentationEnabled: false,
+    isMultiCursorEnabled: false,
+  });
+  applySettings();
+
+  const resize = (d) => { size = Math.max(10, Math.min(40, size + d)); store.set('haspyd-size', size); ed.setFontSize(size); };
+  $('smaller').onclick = () => resize(-2);
+  $('bigger').onclick = () => resize(2);
+  $('play').onclick = () => ed.toggle();
+
+  // ── стан: грає / стоїть / помилка ────────────────────────
+  el.addEventListener('update', (e) => {
+    const s = e.detail || {};
+    const on = !!s.started;
+    $('play').setAttribute('aria-pressed', on);
+    $('play').textContent = on ? '■ стоп' : '▷ грати';
+    const error = s.evalError || s.schedulerError;
+    if (error) status(String(error.message || error), true);
+    else if (s.pending) status('думаю…');
+    else status(on ? 'грає' : 'тиша');
+    if (ed.code) store.set('haspyd-code', ed.code);
+  });
+  addEventListener('beforeunload', () => { if (ed.code) store.set('haspyd-code', ed.code); });
+
+  // ── письмо: кожен звук ставить свій знак ─────────────────
+  // Той самий звук завжди дає той самий знак, тож ритм читається як текст.
+  const SIGNS = [...'ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟᚼᛅᛦᛣᛤᛥ' +
+                    'ⴰⴱⴳⴷⴹⴻⴼⴽⵀⵃⵄⵅⵇⵉⵊⵍⵎⵏⵓⵔⵕⵖⵙⵚⵛⵜⵟⵡⵢⵣⵥ' +
+                    'ᐁᐃᐅᐊᐯᐱᐳᐸᑌᑎᑐᑕᑫᑭᑯᑲᒉᒋᒍᒐᒣᒥᒧᒪᓀᓂᓄᓇᓭᓯᓱᓴ' +
+                    '⠇⠏⠗⠛⠝⠟⠧⠫⠭⠯⠷⠹⠻⠽⠾⡇⡏⡗⡧⢇⢎⢕⢣⣀⣉⣒⣛⣤⣭⣶⣿'];
+  const hash = (str) => { let h = 2166136261; for (const c of str) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+  const glyphs = $('glyphs');
+  const MAX = 240;
+  let line = '', last = null, lastCycle = -1, dirty = false;
+
+  const base = ed.onDraw.bind(ed);
+  ed.onDraw = (haps, time, painters) => {
+    base(haps, time, painters);
+    if (last === null || time < last) { last = time; return; }
+    for (const hap of haps) {
+      const t = hap.whole?.begin?.valueOf?.();
+      if (t === undefined || t <= last || t > time) continue;
+      const v = hap.value || {};
+      const key = `${v.s ?? ''}:${v.n ?? v.note ?? ''}`;
+      const cycle = Math.floor(t);
+      if (cycle !== lastCycle) { line += ' '; lastCycle = cycle; }
+      line += SIGNS[hash(key) % SIGNS.length];
+      dirty = true;
+    }
+    last = time;
+    if (dirty) {
+      if (line.length > MAX) line = line.slice(-MAX);
+      glyphs.textContent = line;
+      dirty = false;
+    }
+  };
+
+  status('тиша');
+})();
+</script>
+</body>
+</html>

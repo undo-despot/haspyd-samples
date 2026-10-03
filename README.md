@@ -38,6 +38,15 @@ stack(
 
 Назва папки = назва звуку в Strudel. Латиниця, малі літери, без пробілів.
 
+## Свій Strudel
+
+[undo-despot.github.io/haspyd-samples](https://undo-despot.github.io/haspyd-samples/) — редактор Strudel у моєму вигляді
+(`index.html`). Кольори й шрифт міняються на початку файлу, у блоці `html:root`.
+Рядок знаків унизу пише сама музика: кожен звук ставить свій знак.
+
+Редактор — це [Strudel](https://strudel.cc) (`@strudel/repl` 1.3.0, ліцензія AGPL-3.0-or-later),
+його копія лежить у `vendor/strudel/`.
+
 ## Знайдені звуки
 
 У [`found/`](found/) лежить відкрита колекція звуків, які я знайшла: вони не мої,
