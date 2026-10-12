@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>UPIC Bench 3D</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap">
+<style>
+/* Layout: one instrument card. Name and thesis above, the orbitable bench filling the card, controls and a live readout beneath like a front panel. */
+:root {
+  --bg: #eceeec;
+  --card: #f7f8f6;
+  --fg: #1d2120;
+  --muted: #5f6763;
+  --rule: #cdd3cf;
+  --scene: #e4e7e4;
+  --phosphor: #1f9d5b;
+  --red: #d8424a;
+  --green: #23935f;
+  --blue: #3a5fd6;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans Condensed", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1111; --card: #151817; --fg: #e3e7e4; --muted: #8b948f; --rule: #2a302d; --scene: #121514;
+    --phosphor: #6dffaa; --red: #ff6b6b; --green: #6be0a0; --blue: #6b9bff; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1111; --card: #151817; --fg: #e3e7e4; --muted: #8b948f; --rule: #2a302d; --scene: #121514;
+  --phosphor: #6dffaa; --red: #ff6b6b; --green: #6be0a0; --blue: #6b9bff; color-scheme: dark;
+}
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); -webkit-font-smoothing: antialiased }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 14px }
+header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px }
+h1 { font: 600 clamp(22px, 3.2vw, 30px)/1.1 var(--display); letter-spacing: .01em; margin: 0; text-wrap: balance }
+h1 small { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-left: 10px; vertical-align: middle }
+.lede { margin: 0; color: var(--muted); max-width: 62ch }
+.card { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) }
+.stage { position: relative; aspect-ratio: 16 / 10; max-width: 100%; min-height: 300px; background: var(--scene); touch-action: none; outline: none }
+.stage:focus-visible { box-shadow: inset 0 0 0 1px var(--muted) }
+.stage canvas { display: block; width: 100%; height: 100%; max-width: 100% }
+.corner { position: absolute; font: 500 11px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); pointer-events: none; padding: 12px 14px }
+.corner.tl { top: 0; left: 0 } .corner.tr { top: 0; right: 0; text-align: right }
+.corner.bl { bottom: 0; left: 0; max-width: 60% }
+.readout { position: absolute; right: 0; bottom: 0; padding: 12px 14px; font: 500 12px/1.3 var(--mono); color: var(--fg); font-variant-numeric: tabular-nums; pointer-events: none; text-align: right; white-space: pre }
+.panel { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 14px; border-top: 1px solid var(--rule) }
+.panel button { font: 500 13px/1 var(--body); color: var(--fg); background: transparent; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 7px }
+.panel button:hover { border-color: var(--muted) }
+.panel button:focus-visible { outline: 1px solid var(--fg); outline-offset: 2px }
+.panel button[aria-pressed="true"] { border-color: var(--fg) }
+.panel .sp { flex: 1 1 0 }
+.dot { width: 8px; height: 8px; border-radius: 50% }
+.status { min-height: 1.5em; margin: 0; padding: 0 14px 12px; font: 400 12px/1.4 var(--mono); color: var(--muted) }
+.notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px 28px; color: var(--muted); font-size: 14px }
+.notes p { margin: 0; min-width: 0 }
+.notes b { color: var(--fg); font-weight: 600 }
+.keys { font: 400 12px/1.6 var(--mono); color: var(--muted) }
+kbd { font: 500 11px/1 var(--mono); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 5px; color: var(--fg) }
+.fallback[hidden] { display: none }
+.fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--muted) }
+@media (max-width: 560px) { .readout { font-size: 11px } .corner.bl { display: none } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>UPIC bench <small>3D · rotatable</small></h1>
+    <p class="lede">Xenakis's drawing synthesizer as a working bench. Drag on the paper to draw an arc. Drag anywhere else to turn the model.</p>
+  </header>
+
+  <section class="card" aria-label="UPIC bench model">
+    <div class="stage" id="stage" tabindex="0" role="application" aria-label="3D UPIC bench. Drag on the paper to draw an arc for the selected voice, drag elsewhere to rotate, scroll or pinch to zoom. Space plays or pauses, S toggles sound, 1 2 3 select a voice, W changes its waveform, arrows scrub, R restores the page.">
+      <span class="corner tl">Fig 1 · orbit</span>
+      <span class="corner tr">UPIC · CEMAMu 1977</span>
+      <span class="corner bl" id="hint">Drag paper to draw · drag elsewhere to rotate · click a drum</span>
+      <span class="readout" id="readout">0.0 s · A — · B — · C —</span>
+      <div class="fallback" id="fallback" hidden>This model needs WebGL, which this browser has turned off. The flat version of the figure works without it.</div>
+    </div>
+    <div class="panel" role="group" aria-label="Synthesizer controls">
+      <button type="button" id="b-sound" aria-pressed="false">Sound off</button>
+      <button type="button" id="b-play" aria-pressed="true">Pause</button>
+      <button type="button" id="b-w0" aria-pressed="true"><span class="dot" style="background:var(--red)"></span><span>A</span></button>
+      <button type="button" id="b-w1" aria-pressed="false"><span class="dot" style="background:var(--green)"></span><span>B</span></button>
+      <button type="button" id="b-w2" aria-pressed="false"><span class="dot" style="background:var(--blue)"></span><span>C</span></button>
+      <span class="sp"></span>
+      <button type="button" id="b-spin" aria-pressed="false">Turntable</button>
+      <button type="button" id="b-view">Reset view</button>
+      <button type="button" id="b-reset">Reset page</button>
+    </div>
+    <p class="status" id="status" aria-live="polite"></p>
+  </section>
+
+  <div class="notes">
+    <p><b>The page.</b> Time runs across the paper over 8 s, and pitch runs away from you over three octaves, 110 to 880 Hz on a log scale. Each line on it is an arc: one voice whose pitch follows the line.</p>
+    <p><b>The reading bar.</b> The gantry sweeps the page as the present moment. Where it crosses an arc, a slider takes that arc's height, which sets how fast that voice's drum turns. Here the drums turn at 1/100 of their true rate.</p>
+    <p><b>The drums.</b> Each drum is engraved with one hand-drawn period of its waveform. The stylus reads it, a fader shows the arc's envelope, and the bus sums the three voices into the amplifier, its vector display and the speaker.</p>
+    <p><b>The real machine.</b> On the UPIC (CEMAMu, Paris, completed 1977) composers drew waveforms, envelopes and then pages with an electromagnetic pen on a large tablet. The first versions calculated a page before you could hear it. From 1987 it ran in real time, with up to 64 oscillators.</p>
+  </div>
+  <p class="keys"><kbd>Space</kbd> play · <kbd>S</kbd> sound · <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> voice · <kbd>W</kbd> waveform · <kbd>←</kbd><kbd>→</kbd> scrub · <kbd>R</kbd> reset page</p>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+
+// UPIC page model. Pure functions, shared by the build (static art) and the page (live).
+// A page is time across (u: 0..1 over PAGE_SECONDS) and pitch up (v: 0..1 over F_LO..F_HI, log).
+// Each arc is one table-lookup oscillator: its height at the playhead sets the frequency,
+// its envelope sets the loudness, and the voices are summed.
+
+const PAGE_SECONDS = 8;
+const F_LO = 110;
+const OCTAVES = 3;
+const TABLE = 128;
+const SPIN = 100;
+
+const freqOf = (v) => F_LO * 2 ** (OCTAVES * v);
+
+const WAVES = [
+  { name: "sine", points: null },
+  { name: "lopsided", points: [[0, 0], [0.16, 0.95], [0.42, 0.3], [0.62, -0.85], [0.84, -0.4], [1, 0]] },
+  { name: "jagged", points: [[0, 0], [0.08, 0.8], [0.18, 0.25], [0.3, 0.95], [0.46, 0.05], [0.56, -0.7], [0.68, -0.2], [0.82, -0.95], [0.92, -0.35], [1, 0]] },
+  { name: "square-ish", points: [[0, 0], [0.05, 0.85], [0.45, 0.75], [0.55, -0.8], [0.95, -0.85], [1, 0]] },
+];
+
+function polyAt(points, x) {
+  for (let i = 1; i < points.length; i++) {
+    if (x <= points[i][0]) {
+      const [x0, y0] = points[i - 1];
+      const [x1, y1] = points[i];
+      return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0 || 1);
+    }
+  }
+  return points[points.length - 1][1];
+}
+
+function tableOf(wave) {
+  const out = new Float32Array(TABLE);
+  for (let i = 0; i < TABLE; i++) {
+    const phase = i / TABLE;
+    out[i] = wave.points ? polyAt(wave.points, phase) : Math.sin(phase * 2 * Math.PI);
+  }
+  return out;
+}
+
+function lookup(table, phase) {
+  const at = (phase - Math.floor(phase)) * TABLE;
+  const i = Math.floor(at);
+  const f = at - i;
+  return table[i % TABLE] * (1 - f) + table[(i + 1) % TABLE] * f;
+}
+
+const ENVELOPES = [
+  [[0, 0], [0.12, 1], [0.7, 0.8], [1, 0]],
+  [[0, 0], [0.04, 1], [0.3, 0.55], [0.85, 0.45], [1, 0]],
+  [[0, 0], [0.45, 0.6], [0.8, 1], [1, 0]],
+];
+
+const envelopeAt = (envelope, s) => polyAt(envelope, Math.min(1, Math.max(0, s)));
+
+function sampled(u0, u1, fn, n = 40) {
+  const out = [];
+  for (let i = 0; i <= n; i++) {
+    const u = u0 + ((u1 - u0) * i) / n;
+    out.push([u, fn(u)]);
+  }
+  return out;
+}
+
+const ease = (t) => t * t * (3 - 2 * t);
+
+function defaultArcs() {
+  return [
+    sampled(0.04, 0.62, (u) => 0.12 + 0.62 * ease((u - 0.04) / 0.58)),
+    sampled(0.2, 0.96, (u) => 0.86 - 0.52 * ((u - 0.2) / 0.76) + 0.04 * Math.sin((u - 0.2) * 18)),
+    sampled(0.5, 0.98, (u) => 0.42 + 0.1 * Math.sin((u - 0.5) * 2 * Math.PI * 4)),
+  ];
+}
+
+// Height of an arc at time u, or null where the arc does not sound.
+function arcAt(arc, u) {
+  if (!arc || arc.length < 2 || u < arc[0][0] || u > arc[arc.length - 1][0]) return null;
+  return polyAt(arc, u);
+}
+
+// What each voice is doing at time u: frequency, amplitude (0..1) and where it is along its arc.
+function voicesAt(arcs, u) {
+  return arcs.map((arc, i) => {
+    const v = arcAt(arc, u);
+    if (v === null) return { on: false, v: 0, f: 0, amp: 0, s: 0 };
+    const s = (u - arc[0][0]) / (arc[arc.length - 1][0] - arc[0][0]);
+    return { on: true, v, f: freqOf(v), amp: envelopeAt(ENVELOPES[i], s), s };
+  });
+}
+
+// Fourier series of one table, for a band-limited Web Audio PeriodicWave.
+function harmonicsOf(table, count = 48) {
+  const real = new Float32Array(count + 1);
+  const imag = new Float32Array(count + 1);
+  for (let h = 1; h <= count; h++) {
+    let re = 0;
+    let im = 0;
+    for (let i = 0; i < TABLE; i++) {
+      const a = (2 * Math.PI * h * i) / TABLE;
+      re += table[i] * Math.cos(a);
+      im += table[i] * Math.sin(a);
+    }
+    real[h] = (2 * re) / TABLE;
+    imag[h] = (2 * im) / TABLE;
+  }
+  return { real, imag };
+}
+
+const noteOf = (f) => {
+  const names = ["A", "A♯", "B", "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯"];
+  const n = Math.round(12 * Math.log2(f / 110));
+  return names[((n % 12) + 12) % 12] + (2 + Math.floor((n + 9) / 12));
+};
+
+
+// ── world plan, same units as the flat figure (x, y on the desk, z up) ──
+const DESK = { x: -134, y: -124, w: 290, d: 216 };
+const TABLET = { x: -118, y: -36, w: 176, d: 106 }, TAB_H = 5;
+const PAGE = { x: -106, y: -26, w: 152, d: 84 }, PAGE_Z = TAB_H + 0.5;
+const U0 = PAGE.x + 2, U_SPAN = PAGE.w - 4, V0 = PAGE.y + PAGE.d - 2, V_SPAN = PAGE.d - 4;
+const RAILS = [-46, 76], RAIL_X = [-124, 64], BEAM_Z = 19, BEAM_H = 4;
+const RACK = { x: -118, y: -114, w: 182, d: 58 }, RACK_H = 6;
+const DISCS = [-84, -26, 32].map((x) => [x, -88]), DISC_R = 17, DISC_TOP = RACK_H + 6;
+const ENGRAVE = [9.5, 5.5], ARM_Z = RACK_H + 9.6;
+const FADER = { y: -110, d: 40 }, BUS_Y = -60;
+const OUT = { x: 82, y: -116, w: 62, d: 42 }, OUT_H = 40;
+const SPK = { x: 90, y: 14, w: 56, d: 56 }, SPK_H = 22;
+const LETTERS = ["A", "B", "C"];
+const xOfU = (u) => U0 + U_SPAN * u;
+const yOfV = (v) => V0 - V_SPAN * v;
+
+const stage = document.getElementById("stage");
+const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+} catch (error) {
+  document.getElementById("fallback").hidden = false;
+  throw error;
+}
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+stage.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 16 / 10, 1, 4000);
+camera.up.set(0, 0, 1);
+const HOME = { pos: new THREE.Vector3(300, -275, 245), target: new THREE.Vector3(8, 22, 4) };
+
+// ── materials: greys by role, voice colours only where a voice is the subject ──
+const dark = () => matchMedia("(prefers-color-scheme: dark)").matches && document.documentElement.dataset.theme !== "light" || document.documentElement.dataset.theme === "dark";
+const M = {
+  desk: new THREE.MeshStandardMaterial({ roughness: 0.85, metalness: 0.05 }),
+  body: new THREE.MeshStandardMaterial({ roughness: 0.55, metalness: 0.15 }),
+  metal: new THREE.MeshStandardMaterial({ roughness: 0.32, metalness: 0.75 }),
+  paper: new THREE.MeshStandardMaterial({ roughness: 0.95, metalness: 0 }),
+  rubber: new THREE.MeshStandardMaterial({ roughness: 0.9, metalness: 0 }),
+  strip: new THREE.MeshStandardMaterial({ roughness: 0.6, metalness: 0.3 }),
+  ink: new THREE.LineBasicMaterial({ transparent: true, opacity: 0.35 }),
+  tick: new THREE.LineBasicMaterial({ transparent: true, opacity: 0.6 }),
+  lit: new THREE.MeshBasicMaterial(),
+  screw: new THREE.MeshStandardMaterial({ roughness: 0.4, metalness: 0.9 }),
+};
+const VOICE = ["--red", "--green", "--blue"].map(() => new THREE.MeshBasicMaterial());
+function paintTheme() {
+  const d = dark();
+  scene.background = new THREE.Color(css("--scene"));
+  M.desk.color.set(d ? "#2a2f2d" : "#c9cecb");
+  M.body.color.set(d ? "#3a403d" : "#e3e6e3");
+  M.metal.color.set(d ? "#a7aeab" : "#cfd4d1");
+  M.paper.color.set(d ? "#d9ddd6" : "#fbfbf7");
+  M.rubber.color.set(d ? "#1b1e1d" : "#4a504d");
+  M.strip.color.set(d ? "#56605b" : "#b8beba");
+  M.ink.color.set("#5f6b66");
+  M.tick.color.set(d ? "#38403c" : "#4b5550");
+  M.lit.color.set(d ? "#ffffff" : "#111413");
+  M.screw.color.set(d ? "#8d9591" : "#9aa29e");
+  ["--red", "--green", "--blue"].forEach((name, i) => VOICE[i].color.set(css(name)));
+  hemi.color.set(d ? "#c8d4ce" : "#ffffff");
+  hemi.groundColor.set(d ? "#1a1d1c" : "#9aa29e");
+  hemi.intensity = d ? 0.55 : 0.9;
+  sun.intensity = d ? 2.1 : 2.4;
+}
+
+// ── lights ──
+const hemi = new THREE.HemisphereLight("#fff", "#888", 0.8);
+hemi.position.set(0, 0, 1);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight("#fff", 2.4);
+sun.position.set(160, 220, 380);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -220, right: 220, top: 220, bottom: -220, near: 50, far: 900 });
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.4;
+scene.add(sun);
+const fill = new THREE.DirectionalLight("#cfe0ff", 0.35);
+fill.position.set(-250, -120, 160);
+scene.add(fill);
+
+// ── builders ──
+const shadowed = (mesh) => { mesh.castShadow = true; mesh.receiveShadow = true; return mesh; };
+function box(parent, p, z, h, mat, r = 1) {
+  const rr = Math.max(0.05, Math.min(r, p.w / 2 - 0.01, p.d / 2 - 0.01, h / 2 - 0.01));
+  const mesh = shadowed(new THREE.Mesh(new RoundedBoxGeometry(p.w, p.d, h, 3, rr), mat));
+  mesh.position.set(p.x + p.w / 2, p.y + p.d / 2, z + h / 2);
+  parent.add(mesh);
+  return mesh;
+}
+function cyl(parent, x, y, r, z, h, mat, seg = 40) {
+  const geo = new THREE.CylinderGeometry(r, r, h, seg);
+  geo.rotateX(Math.PI / 2);
+  const mesh = shadowed(new THREE.Mesh(geo, mat));
+  mesh.position.set(x, y, z + h / 2);
+  parent.add(mesh);
+  return mesh;
+}
+function lines(parent, segs, mat) {
+  const geo = new THREE.BufferGeometry().setFromPoints(segs.flat().map((p) => new THREE.Vector3(...p)));
+  const obj = new THREE.LineSegments(geo, mat);
+  parent.add(obj);
+  return obj;
+}
+function tube(parent, pts, r, mat, closed = false, seg) {
+  const curve = new THREE.CatmullRomCurve3(pts.map((p) => new THREE.Vector3(...p)), closed, "catmullrom", 0.2);
+  const mesh = new THREE.Mesh(new THREE.TubeGeometry(curve, seg ?? Math.max(16, pts.length * 6), r, 8, closed), mat);
+  mesh.castShadow = true;
+  parent.add(mesh);
+  return mesh;
+}
+function screws(parent, p, inset, z) {
+  for (const [x, y] of [[p.x + inset, p.y + inset], [p.x + p.w - inset, p.y + inset], [p.x + inset, p.y + p.d - inset], [p.x + p.w - inset, p.y + p.d - inset]]) cyl(parent, x, y, 1.3, z, 0.4, M.screw, 12);
+}
+function knurled(parent, x, y, r, z, h, mat, n = 30) {
+  cyl(parent, x, y, r * 0.94, z, h, mat, 48);
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    const rib = shadowed(new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.6, h * 0.92), mat));
+    rib.position.set(x + Math.cos(a) * r * 0.97, y + Math.sin(a) * r * 0.97, z + h / 2);
+    rib.rotation.z = a;
+    parent.add(rib);
+  }
+}
+
+// the flat figure's plan is left-handed (y runs toward the viewer's left), so mirror y to keep the same layout
+const world = new THREE.Group();
+world.scale.y = -1;
+scene.add(world);
+
+// desk on four feet
+box(world, DESK, -8, 8, M.desk, 6);
+for (const [x, y] of [[DESK.x + 20, DESK.y + 20], [DESK.x + DESK.w - 20, DESK.y + 20], [DESK.x + 20, DESK.y + DESK.d - 20], [DESK.x + DESK.w - 20, DESK.y + DESK.d - 20]]) {
+  cyl(world, x, y, 7, -13, 1.6, M.rubber);
+  cyl(world, x, y, 5.4, -11.4, 3.4, M.body);
+}
+screws(world, DESK, 10, 0);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(2000, 2000), new THREE.ShadowMaterial({ opacity: 0.18 }));
+ground.position.z = -13;
+ground.receiveShadow = true;
+world.add(ground);
+
+// tablet, paper, grid, rulers
+box(world, TABLET, 0, TAB_H, M.body, 3);
+screws(world, TABLET, 5, TAB_H);
+const paper = box(world, PAGE, TAB_H, 0.5, M.paper, 0.3);
+const grid = [];
+for (let i = 1; i < PAGE_SECONDS; i++) grid.push([[xOfU(i / PAGE_SECONDS), PAGE.y, PAGE_Z + 0.03], [xOfU(i / PAGE_SECONDS), PAGE.y + PAGE.d, PAGE_Z + 0.03]]);
+for (let i = 1; i < OCTAVES; i++) grid.push([[PAGE.x, yOfV(i / OCTAVES), PAGE_Z + 0.03], [PAGE.x + PAGE.w, yOfV(i / OCTAVES), PAGE_Z + 0.03]]);
+lines(world, grid, M.ink);
+const timeStrip = { x: PAGE.x, y: PAGE.y + PAGE.d + 2, w: PAGE.w, d: 5 };
+box(world, timeStrip, TAB_H, 0.5, M.strip, 0.3);
+const tt = [];
+for (let i = 0; i <= 16; i++) { const x = xOfU(i / 16); tt.push([[x, timeStrip.y + 0.2, PAGE_Z + 0.03], [x, timeStrip.y + (i % 2 ? 1.6 : 3.2), PAGE_Z + 0.03]]); }
+lines(world, tt, M.tick);
+const pitchStrip = { x: PAGE.x - 7, y: PAGE.y, w: 5, d: PAGE.d };
+box(world, pitchStrip, TAB_H, 0.5, M.strip, 0.3);
+const pt = [];
+for (let i = 0; i <= 12 * OCTAVES; i++) { const y = yOfV(i / (12 * OCTAVES)); pt.push([[pitchStrip.x + pitchStrip.w - 0.2, y, PAGE_Z + 0.03], [pitchStrip.x + pitchStrip.w - (i % 12 ? 1.2 : 3), y, PAGE_Z + 0.03]]); }
+lines(world, pt, M.tick);
+
+// pen in its tray, cable to the tablet
+const tray = { x: PAGE.x + 70, y: TABLET.y + 2.5, w: 70, d: 6 };
+box(world, tray, TAB_H, 0.6, M.strip, 1);
+const pen = new THREE.Mesh(new THREE.CapsuleGeometry(1.5, 44, 6, 16), M.metal);
+pen.rotation.z = Math.PI / 2;
+pen.position.set(tray.x + 30, tray.y + 3, TAB_H + 2.2);
+shadowed(pen);
+world.add(pen);
+const nib = new THREE.Mesh(new THREE.ConeGeometry(1.2, 5, 16), M.rubber);
+nib.rotation.z = Math.PI / 2;
+nib.position.set(tray.x + 4.5, tray.y + 3, TAB_H + 2.2);
+world.add(nib);
+tube(world, [[tray.x + 53, tray.y + 3, TAB_H + 2.2], [tray.x + 60, tray.y + 3, TAB_H + 1.2], [TABLET.x + TABLET.w - 6, TABLET.y + 3, TAB_H + 0.8]], 0.45, M.rubber);
+
+// rails with end stops
+for (const y of RAILS) {
+  box(world, { x: RAIL_X[0], y: y - 2.5, w: RAIL_X[1] - RAIL_X[0], d: 5 }, 0, 3, M.metal, 0.8);
+  for (const x of [RAIL_X[0] - 5, RAIL_X[1]]) box(world, { x, y: y - 4.5, w: 5, d: 9 }, 0, 7, M.body, 1);
+}
+
+// arcs on the paper (rebuilt when redrawn)
+const arcGroup = new THREE.Group();
+world.add(arcGroup);
+const arcMeshes = [null, null, null];
+function paintArc(i, arc) {
+  if (arcMeshes[i]) { arcGroup.remove(arcMeshes[i]); arcMeshes[i].traverse((o) => o.geometry && o.geometry.dispose()); }
+  const g = new THREE.Group();
+  const pts = arc.map(([u, v]) => [xOfU(u), yOfV(v), PAGE_Z + 0.35]);
+  const m = tube(g, pts, 0.5, VOICE[i], false, Math.max(40, pts.length * 3));
+  m.castShadow = false;
+  for (const p of [pts[0], pts[pts.length - 1]]) { const s = new THREE.Mesh(new THREE.SphereGeometry(1.05, 16, 12), VOICE[i]); s.position.set(...p); g.add(s); }
+  arcGroup.add(g);
+  arcMeshes[i] = g;
+}
+let inkMesh = null;
+function paintInk(points, i) {
+  if (inkMesh) { world.remove(inkMesh); inkMesh.geometry.dispose(); inkMesh = null; }
+  if (!points || points.length < 2) return;
+  inkMesh = tube(world, points.map(([u, v]) => [xOfU(u), yOfV(v), PAGE_Z + 0.35]), 0.5, VOICE[i], false, points.length * 3);
+}
+
+// ── rack: three wavetable drums, heads, faders, summing bus ──
+box(world, RACK, 0, RACK_H, M.body, 3);
+screws(world, RACK, 7, RACK_H);
+const drums = DISCS.map(([cx, cy], i) => {
+  cyl(world, cx, cy, DISC_R + 2, RACK_H, 1.6, M.rubber, 64);
+  const spin = new THREE.Group();
+  spin.position.set(cx, cy, 0);
+  world.add(spin);
+  knurled(spin, 0, 0, DISC_R, RACK_H + 1.6, DISC_TOP - RACK_H - 1.6, M.metal, 72);
+  cyl(spin, 0, 0, 2.2, DISC_TOP, 1.4, M.body, 20);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(ENGRAVE[0], 0.12, 6, 64), M.ink);
+  ring.position.z = DISC_TOP + 0.02;
+  spin.add(ring);
+  // read head: post, arm over the platter, stylus that rides the engraved line
+  cyl(world, cx, cy + DISC_R + 4, 3, RACK_H, 1.4, M.rubber, 20);
+  cyl(world, cx, cy + DISC_R + 4, 2.2, RACK_H + 1.4, 8, M.body, 20);
+  cyl(world, cx, cy + DISC_R + 4, 2.6, RACK_H + 9.4, 1.6, M.body, 20);
+  box(world, { x: cx - 0.9, y: cy + ENGRAVE[0] - ENGRAVE[1], w: 1.8, d: DISC_R + 4 - ENGRAVE[0] + ENGRAVE[1] }, ARM_Z, 1.2, M.metal, 0.4);
+  const stylus = new THREE.Group();
+  const pin = new THREE.Mesh(new THREE.CylinderGeometry(0.35, 0.35, ARM_Z - DISC_TOP, 8).rotateX(Math.PI / 2), M.lit);
+  pin.position.z = (ARM_Z + DISC_TOP) / 2;
+  const tip = new THREE.Mesh(new THREE.SphereGeometry(0.9, 12, 10), M.lit);
+  tip.position.z = DISC_TOP + 0.4;
+  stylus.add(pin, tip);
+  stylus.position.set(cx, cy + ENGRAVE[0], 0);
+  world.add(stylus);
+  // selection ring on the rack top
+  const sel = new THREE.Mesh(new THREE.TorusGeometry(DISC_R + 4.2, 0.35, 6, 96), VOICE[i]);
+  sel.position.set(cx, cy, RACK_H + 0.3);
+  world.add(sel);
+  // fader: plate, slot, knob that follows the envelope
+  const fp = { x: cx + 22, y: FADER.y, w: 9, d: FADER.d };
+  box(world, fp, RACK_H, 1, M.strip, 1);
+  box(world, { x: fp.x + 3.6, y: fp.y + 3, w: 1.8, d: fp.d - 6 }, RACK_H + 0.6, 0.5, M.rubber, 0.3);
+  const knob = new THREE.Group();
+  box(knob, { x: fp.x + 1, y: fp.y + fp.d - 9, w: 7, d: 5 }, RACK_H + 1, 3, M.body, 1);
+  box(knob, { x: fp.x + 1.2, y: fp.y + fp.d - 6.8, w: 6.6, d: 0.6 }, RACK_H + 4, 0.05, VOICE[i], 0.02);
+  world.add(knob);
+  // lead from the head down to the bus
+  tube(world, [[cx, cy + DISC_R + 6.2, RACK_H + 3], [cx, cy + DISC_R + 7.6, RACK_H + 0.6], [cx, BUS_Y - 1.4, RACK_H + 1]], 0.45, M.rubber);
+  return { cx, cy, spin, stylus, sel, knob, wave: null };
+});
+box(world, { x: RACK.x + 12, y: BUS_Y - 1.4, w: RACK.w - 12, d: 2.8 }, RACK_H, 1.6, M.metal, 0.5);
+function engrave(i, table) {
+  const d = drums[i];
+  if (d.wave) { d.spin.remove(d.wave); d.wave.geometry.dispose(); }
+  const pts = [];
+  for (let j = 0; j < 160; j++) {
+    const phase = j / 160;
+    const r = ENGRAVE[0] + ENGRAVE[1] * lookup(table, phase);
+    pts.push([Math.sin(phase * Math.PI * 2) * r, Math.cos(phase * Math.PI * 2) * r, DISC_TOP + 0.25]);
+  }
+  d.wave = tube(d.spin, pts, 0.42, VOICE[i], true, 320);
+  d.wave.castShadow = false;
+}
+
+// ── output amplifier with vector display, speaker ──
+box(world, { x: OUT.x - 2, y: OUT.y - 2, w: OUT.w + 4, d: OUT.d + 4 }, 0, 2, M.rubber, 1.5);
+box(world, OUT, 2, OUT_H - 2, M.body, 2.5);
+screws(world, OUT, 6, OUT_H);
+for (let i = 0; i < 5; i++) box(world, { x: OUT.x + 8 + i * 4.4, y: OUT.y + 8, w: 1.8, d: 24 }, OUT_H - 0.3, 0.4, M.rubber, 0.3);
+for (const [x, y] of [[OUT.x + 40, OUT.y + 14], [OUT.x + 52, OUT.y + 28]]) {
+  cyl(world, x, y, 6, OUT_H, 1, M.rubber, 32);
+  knurled(world, x, y, 4.6, OUT_H + 1, 4, M.metal, 24);
+  box(world, { x: x - 0.3, y: y, w: 0.6, d: 4 }, OUT_H + 5, 0.15, M.lit, 0.05);
+}
+const SCREEN = { w: 48, h: 22 };
+const screenCanvas = document.createElement("canvas");
+screenCanvas.width = 480;
+screenCanvas.height = 220;
+const sctx = screenCanvas.getContext("2d");
+const screenTex = new THREE.CanvasTexture(screenCanvas);
+screenTex.colorSpace = THREE.SRGBColorSpace;
+const screenGeo = new THREE.PlaneGeometry(SCREEN.w, SCREEN.h);
+screenGeo.rotateX(Math.PI / 2);
+screenGeo.rotateZ(Math.PI);
+const screen = new THREE.Mesh(screenGeo, new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false }));
+screen.position.set(OUT.x + 7 + SCREEN.w / 2, OUT.y + OUT.d + 0.3, OUT_H - 6 - SCREEN.h / 2);
+world.add(screen);
+box(world, { x: OUT.x + 4.8, y: OUT.y + OUT.d - 0.2, w: SCREEN.w + 4.4, d: 0.45 }, OUT_H - 6 - SCREEN.h - 2.2, SCREEN.h + 4.4, M.rubber, 0.2);
+for (const x of [OUT.x + 8, OUT.x + 40]) box(world, { x: x - 2, y: OUT.y + OUT.d, w: 4, d: 1.6 }, 3.5, 3, M.rubber, 0.5);
+tube(world, [[RACK.x + RACK.w - 1.5, BUS_Y, RACK_H + 1.6], [RACK.x + RACK.w + 2, BUS_Y, 0.6], [OUT.x + 8, BUS_Y, 0.6], [OUT.x + 8, OUT.y + OUT.d + 3, 0.6], [OUT.x + 8, OUT.y + OUT.d + 1.6, 5]], 0.5, M.rubber);
+tube(world, [[OUT.x + 40, OUT.y + OUT.d + 1.6, 5], [OUT.x + 40, OUT.y + OUT.d + 3, 0.6], [OUT.x + 40, SPK.y - 3, 0.6], [OUT.x + 40, SPK.y, 5]], 0.5, M.rubber);
+
+box(world, SPK, 0, SPK_H, M.body, 3);
+screws(world, SPK, 5, SPK_H);
+const SC = [SPK.x + SPK.w / 2, SPK.y + SPK.d / 2];
+cyl(world, SC[0], SC[1], 23, SPK_H, 1.2, M.rubber, 64);
+const cone = new THREE.Group();
+cone.position.set(SC[0], SC[1], SPK_H + 1.2);
+const coneGeo = new THREE.CylinderGeometry(18, 4.5, 4, 64, 1, true).rotateX(-Math.PI / 2);
+const coneMesh = new THREE.Mesh(coneGeo, new THREE.MeshStandardMaterial({ color: "#2b302e", roughness: 0.95, side: THREE.DoubleSide }));
+coneMesh.position.z = -1.6;
+cone.add(coneMesh);
+for (const r of [13, 8]) { const t = new THREE.Mesh(new THREE.TorusGeometry(r, 0.2, 6, 64), M.ink); t.position.z = r === 13 ? -0.9 : -2; cone.add(t); }
+const cap = new THREE.Mesh(new THREE.SphereGeometry(4.2, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2).rotateX(Math.PI / 2), M.metal);
+cap.position.z = -3.4;
+cone.add(cap);
+world.add(cone);
+const surround = new THREE.Mesh(new THREE.TorusGeometry(19.5, 1.4, 10, 72), M.rubber);
+surround.position.set(SC[0], SC[1], SPK_H + 1.2);
+world.add(surround);
+
+// ── gantry: the reading bar ──
+const gantry = new THREE.Group();
+world.add(gantry);
+for (const y of RAILS) {
+  box(gantry, { x: -7, y: y - 4, w: 14, d: 8 }, 3, 4, M.body, 1.2);
+  box(gantry, { x: -2.5, y: y - 2.5, w: 5, d: 5 }, 7, BEAM_Z - 7, M.body, 0.8);
+}
+box(gantry, { x: -3, y: RAILS[0] - 3.5, w: 6, d: RAILS[1] - RAILS[0] + 7 }, BEAM_Z, BEAM_H, M.body, 1);
+knurled(gantry, 0, RAILS[1] + 8, 4, BEAM_Z - 1.6, 6, M.metal, 20);
+const now = box(gantry, { x: -0.35, y: PAGE.y, w: 0.7, d: PAGE.d }, PAGE_Z + 0.05, 0.12, M.lit, 0.05);
+now.castShadow = false;
+const readers = [0, 1, 2].map((i) => {
+  const slider = new THREE.Group();
+  box(slider, { x: -4, y: -2.6, w: 8, d: 5.2 }, BEAM_Z + BEAM_H, 2.4, M.metal, 1);
+  box(slider, { x: -4.05, y: -0.3, w: 8.1, d: 0.6 }, BEAM_Z + BEAM_H + 2.42, 0.05, VOICE[i], 0.02);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(2.4, 0.3, 8, 32), VOICE[i]);
+  ring.position.z = PAGE_Z + 0.4;
+  const drop = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, BEAM_Z - PAGE_Z, 6).rotateX(Math.PI / 2), VOICE[i]);
+  drop.position.z = (BEAM_Z + PAGE_Z) / 2;
+  const g = new THREE.Group();
+  g.add(slider, ring, drop);
+  gantry.add(g);
+  return g;
+});
+
+// ── state ──
+const still = matchMedia("(prefers-reduced-motion: reduce)");
+let arcs = defaultArcs();
+let waveIx = [0, 1, 2];
+let tables = waveIx.map((w) => tableOf(WAVES[w]));
+let selected = 0, u = 0, playing = !still.matches, turn = [0, 0, 0], amps = [0, 0, 0], level = 0, drawing = null;
+arcs.forEach((a, i) => paintArc(i, a));
+tables.forEach((t, i) => engrave(i, t));
+
+// ── sound: one oscillator per arc, its wave built from the drawn table ──
+let audio = null;
+const waveFor = (i) => { const { real, imag } = harmonicsOf(tables[i]); return audio.ctx.createPeriodicWave(real, imag, { disableNormalization: true }); };
+function startAudio() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const master = ctx.createGain();
+  master.gain.value = 0.22;
+  master.connect(ctx.destination);
+  const voices = [0, 1, 2].map(() => { const osc = ctx.createOscillator(); const gain = ctx.createGain(); gain.gain.value = 0; osc.connect(gain).connect(master); osc.start(); return { osc, gain }; });
+  audio = { ctx, voices };
+  voices.forEach((v, i) => v.osc.setPeriodicWave(waveFor(i)));
+}
+function soundAt(state) {
+  if (!audio) return;
+  const t = audio.ctx.currentTime;
+  state.forEach((s, i) => {
+    const v = audio.voices[i];
+    if (s.on) v.osc.frequency.setTargetAtTime(s.f, t, 0.012);
+    v.gain.gain.setTargetAtTime(playing && s.on ? s.amp / 3 : 0, t, 0.02);
+  });
+}
+
+// ── pointer: paper draws, drums switch waveform, anything else orbits ──
+const ray = new THREE.Raycaster();
+const ndc = new THREE.Vector2();
+const pagePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), -PAGE_Z);
+const drumTargets = drums.map((d) => d.spin);
+function aim(event) {
+  const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((event.clientX - r.left) / r.width) * 2 - 1, -((event.clientY - r.top) / r.height) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+}
+const toUV = (point) => { const p = world.worldToLocal(point.clone()); return [(p.x - U0) / U_SPAN, (V0 - p.y) / V_SPAN]; };
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+let press = null;
+renderer.domElement.addEventListener("pointerdown", (event) => {
+  aim(event);
+  const hit = ray.intersectObject(paper, false)[0];
+  press = { x: event.clientX, y: event.clientY, drum: -1 };
+  if (hit) {
+    controls.enabled = false;
+    renderer.domElement.setPointerCapture(event.pointerId);
+    const [pu, pv] = toUV(hit.point);
+    drawing = [[clamp(pu, 0, 1), clamp(pv, 0, 1)]];
+    setSpin(false);
+    return;
+  }
+  const d = ray.intersectObjects(drumTargets, true)[0];
+  if (d) press.drum = drumTargets.findIndex((g) => { let o = d.object; while (o) { if (o === g) return true; o = o.parent; } return false; });
+});
+renderer.domElement.addEventListener("pointermove", (event) => {
+  aim(event);
+  if (drawing) {
+    const p = new THREE.Vector3();
+    if (!ray.ray.intersectPlane(pagePlane, p)) return;
+    const [pu, pv] = toUV(p);
+    // an arc is pitch as a function of time, so the pen only moves forward in time
+    if (pu > drawing[drawing.length - 1][0] + 0.003) { drawing.push([clamp(pu, 0, 1), clamp(pv, 0, 1)]); paintInk(drawing, selected); }
+    return;
+  }
+  if (event.buttons) return;
+  const onPaper = ray.intersectObject(paper, false).length > 0;
+  const onDrum = !onPaper && ray.intersectObjects(drumTargets, true).length > 0;
+  renderer.domElement.style.cursor = onPaper ? "crosshair" : onDrum ? "pointer" : "grab";
+});
+function release(event) {
+  if (drawing) {
+    if (drawing.length > 2 && drawing[drawing.length - 1][0] - drawing[0][0] > 0.03) {
+      arcs[selected] = drawing;
+      paintArc(selected, drawing);
+      say("Arc " + LETTERS[selected] + " redrawn.");
+      selected = (selected + 1) % 3;
+      sync();
+    }
+    drawing = null;
+    paintInk(null);
+    controls.enabled = true;
+  } else if (press && press.drum >= 0 && Math.hypot(event.clientX - press.x, event.clientY - press.y) < 6) {
+    selected = press.drum;
+    cycleWave(press.drum);
+  }
+  press = null;
+}
+renderer.domElement.addEventListener("pointerup", release);
+renderer.domElement.addEventListener("pointercancel", release);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 160;
+controls.maxDistance = 1100;
+controls.maxPolarAngle = Math.PI * 0.47;
+controls.autoRotateSpeed = 0.6;
+// narrow screens step the camera back so the whole bench stays in frame
+function homeView() { const k = Math.max(1, 1.5 / camera.aspect); camera.position.copy(HOME.pos).sub(HOME.target).multiplyScalar(k).add(HOME.target); controls.target.copy(HOME.target); controls.update(); }
+
+// ── controls ──
+const $ = (id) => document.getElementById(id);
+const say = (text) => { $("status").textContent = text; };
+function sync() {
+  $("b-play").textContent = playing ? "Pause" : "Play";
+  $("b-play").setAttribute("aria-pressed", String(playing));
+  const on = !!audio && audio.ctx.state === "running";
+  $("b-sound").textContent = on ? "Sound on" : "Sound off";
+  $("b-sound").setAttribute("aria-pressed", String(on));
+  $("b-spin").setAttribute("aria-pressed", String(controls.autoRotate));
+  [0, 1, 2].forEach((i) => { const b = $("b-w" + i); b.lastElementChild.textContent = LETTERS[i] + ": " + WAVES[waveIx[i]].name; b.setAttribute("aria-pressed", String(i === selected)); });
+}
+function cycleWave(i) {
+  waveIx[i] = (waveIx[i] + 1) % WAVES.length;
+  tables[i] = tableOf(WAVES[waveIx[i]]);
+  engrave(i, tables[i]);
+  if (audio) audio.voices[i].osc.setPeriodicWave(waveFor(i));
+  say("Voice " + LETTERS[i] + " waveform: " + WAVES[waveIx[i]].name + ".");
+  sync();
+}
+async function toggleSound() {
+  if (!audio) startAudio();
+  else if (audio.ctx.state === "running") await audio.ctx.suspend();
+  else await audio.ctx.resume();
+  if (audio.ctx.state !== "running") await audio.ctx.resume().catch(() => {});
+  sync();
+}
+function setSpin(on) { controls.autoRotate = on; sync(); }
+const reset = () => { arcs = defaultArcs(); waveIx = [0, 1, 2]; tables = waveIx.map((w) => tableOf(WAVES[w])); arcs.forEach((a, i) => paintArc(i, a)); tables.forEach((t, i) => { engrave(i, t); if (audio) audio.voices[i].osc.setPeriodicWave(waveFor(i)); }); selected = 0; sync(); say("Page restored."); };
+$("b-sound").addEventListener("click", toggleSound);
+$("b-play").addEventListener("click", () => { playing = !playing; sync(); });
+$("b-spin").addEventListener("click", () => setSpin(!controls.autoRotate));
+$("b-view").addEventListener("click", () => { setSpin(false); homeView(); });
+$("b-reset").addEventListener("click", reset);
+[0, 1, 2].forEach((i) => $("b-w" + i).addEventListener("click", () => { selected = i; cycleWave(i); }));
+stage.addEventListener("keydown", (event) => {
+  const key = event.key;
+  if (key === " ") { playing = !playing; sync(); }
+  else if (key === "s" || key === "S") toggleSound();
+  else if (key === "1" || key === "2" || key === "3") { selected = Number(key) - 1; sync(); }
+  else if (key === "w" || key === "W") cycleWave(selected);
+  else if (key === "r" || key === "R") reset();
+  else if (key === "ArrowRight" || key === "ArrowLeft") { const step = (event.shiftKey ? 1 : 0.25) / PAGE_SECONDS; u = clamp(u + (key === "ArrowRight" ? step : -step), 0, 0.9999); }
+  else if (key === "Home") u = 0;
+  else if (key === "End") u = 0.9999;
+  else return;
+  event.preventDefault();
+});
+
+// ── one moment ──
+let lastText = "";
+function drawScreen(state) {
+  const W = screenCanvas.width, H = screenCanvas.height;
+  sctx.fillStyle = "#08100c";
+  sctx.fillRect(0, 0, W, H);
+  sctx.strokeStyle = "#163527";
+  sctx.lineWidth = 1;
+  sctx.beginPath();
+  for (let i = 1; i < 8; i++) { sctx.moveTo((i * W) / 8, 0); sctx.lineTo((i * W) / 8, H); }
+  for (let i = 1; i < 4; i++) { sctx.moveTo(0, (i * H) / 4); sctx.lineTo(W, (i * H) / 4); }
+  sctx.stroke();
+  // a 12 ms window of the summed output
+  sctx.strokeStyle = "#7dffb2";
+  sctx.shadowColor = "#3dff8e";
+  sctx.shadowBlur = 8;
+  sctx.lineWidth = 2.4;
+  sctx.beginPath();
+  for (let j = 0; j <= 300; j++) {
+    const tau = (j / 300) * 0.012;
+    let y = 0;
+    state.forEach((s, i) => { if (s.on) y += (amps[i] / 3) * lookup(tables[i], s.f * tau); });
+    const px = (j / 300) * W, py = H / 2 - y * H * 0.44;
+    j ? sctx.lineTo(px, py) : sctx.moveTo(px, py);
+  }
+  sctx.stroke();
+  sctx.shadowBlur = 0;
+  screenTex.needsUpdate = true;
+}
+function show(state) {
+  gantry.position.x = xOfU(u);
+  state.forEach((s, i) => {
+    readers[i].visible = s.on;
+    if (s.on) readers[i].position.y = yOfV(s.v);
+    const d = drums[i];
+    d.spin.rotation.z = turn[i] * Math.PI * 2;
+    d.stylus.position.y = d.cy + ENGRAVE[0] + ENGRAVE[1] * lookup(tables[i], turn[i]);
+    d.knob.position.y = -(FADER.d - 14) * (1 - amps[i]);
+    d.sel.visible = i === selected;
+  });
+  cone.position.z = SPK_H + 1.2 + level * 1.4;
+  drawScreen(state);
+  const text = (u * PAGE_SECONDS).toFixed(1) + " s · " + state.map((s, i) => LETTERS[i] + " " + (s.on ? Math.round(s.f) + " Hz" : "—")).join(" · ");
+  if (text !== lastText) { $("readout").textContent = text; lastText = text; }
+}
+
+function resize() {
+  const r = stage.getBoundingClientRect();
+  renderer.setSize(r.width, r.height, false);
+  camera.aspect = r.width / r.height;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+resize();
+homeView();
+paintTheme();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paintTheme);
+new MutationObserver(paintTheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+let visible = true, last = 0, frame = 0;
+function tick(nowMs) {
+  const dt = last ? Math.min((nowMs - last) / 1000, 1 / 30) : 1 / 60;
+  last = nowMs;
+  if (playing && !drawing) u = (u + dt / PAGE_SECONDS) % 1;
+  const state = voicesAt(arcs, u);
+  state.forEach((s, i) => {
+    // the drums turn at 1/SPIN of the true rate so the eye can follow them
+    if (s.on && playing) turn[i] = (turn[i] + (s.f / SPIN) * dt) % 1;
+    const want = s.on ? s.amp : 0;
+    amps[i] = still.matches ? want : amps[i] + (want - amps[i]) * (1 - Math.exp(-dt / 0.03));
+  });
+  level = playing ? (amps.reduce((a, b) => a + b, 0) / 3) * (0.6 + 0.4 * Math.sin((nowMs / 1000) * 2 * Math.PI * 6)) : 0;
+  soundAt(state);
+  show(state);
+  controls.update();
+  renderer.render(scene, camera);
+  frame = visible ? requestAnimationFrame(tick) : 0;
+}
+const run = () => { if (!frame && visible) { last = 0; frame = requestAnimationFrame(tick); } };
+new IntersectionObserver((entries) => { visible = entries[entries.length - 1].isIntersecting && !document.hidden; if (visible) run(); else if (audio) soundAt(voicesAt(arcs, u).map((s) => ({ ...s, on: false }))); }, { rootMargin: "120px 0px" }).observe(stage);
+document.addEventListener("visibilitychange", () => { visible = !document.hidden; if (visible) run(); });
+sync();
+run();
+window.__upic = { get u() { return u; }, get selected() { return selected; }, get waves() { return waveIx.slice(); }, camera, controls };
+</script>
+
+</body>
+</html>
